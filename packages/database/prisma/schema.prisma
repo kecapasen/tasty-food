@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  fullname  String    @db.VarChar(50)
+  role      Role
+  password  String    @db.VarChar(50)
+  avatar    String?   @db.Text
+  cart      Cart?
+  order     Order[]
+  Menu      Menu[]
+  news      News[]
+  gallery   Gallery[]
+  createdAt DateTime  @default(now()) @db.Timestamp()
+  updatedAt DateTime? @db.Timestamp()
+  deletedAt DateTime? @db.Timestamp()
+
+  @@map("user")
+}
+
+model Menu {
+  id          Int           @id @default(autoincrement())
+  user        User          @relation(fields: [userId], references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  userId      Int
+  name        String        @unique @db.VarChar(15)
+  description String        @db.VarChar(50)
+  price       Int
+  category    Category
+  image       String        @db.Text
+  orderDetail OrderDetail[]
+  cartDetail  CartDetail[]
+  createdAt   DateTime      @default(now()) @db.Timestamp()
+  updatedAt   DateTime?     @db.Timestamp()
+  deletedAt   DateTime?     @db.Timestamp()
+
+  @@map("menu")
+}
+
+model Order {
+  id          Int           @id @default(autoincrement())
+  user        User          @relation(fields: [userId], references: [userId], onUpdate: Restrict, onDelete: Restrict)
+  userId      Int
+  method      Method
+  total       Int
+  status      Status        @default(PENDING)
+  orderDetail OrderDetail[]
+  createdAt   DateTime      @default(now()) @db.Timestamp()
+
+  @@map("order")
+}
+
+model OrderDetail {
+  id       Int   @id @default(autoincrement())
+  order    Order @relation(fields: [orderId], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  menu     Menu  @relation(fields: [menuId], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  orderId  Int
+  menuId   Int
+  price    Int
+  quantity Int   @default(1)
+  total    Int
+
+  @@map("orderDetail")
+}
+
+model Cart {
+  id         Int          @id @default(autoincrement())
+  user       User         @relation(fields: [userId], references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  userId     Int          @unique
+  cartDetail CartDetail[]
+
+  @@map("cart")
+}
+
+model CartDetail {
+  id       Int  @id @default(autoincrement())
+  cart     Cart @relation(fields: [cartId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  menu     Menu @relation(fields: [menuId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  cartId   Int
+  menuId   Int
+  price    Int
+  quantity Int  @default(1)
+  total    Int
+
+  @@map("cartDetail")
+}
+
+model News {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  userId      Int
+  title       String    @db.VarChar(50)
+  article     Json
+  headerImage String    @db.Text
+  createdAt   DateTime  @default(now()) @db.Timestamp()
+  updatedAt   DateTime? @db.Timestamp()
+  deletedAt   DateTime? @db.Timestamp()
+
+  @@map("news")
+}
+
+model Gallery {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [userId], onUpdate: Cascade, onDelete: Cascade)
+  userId    Int
+  image     String    @db.Text
+  createdAt DateTime  @default(now()) @db.Timestamp()
+  updatedAt DateTime? @db.Timestamp()
+  deletedAt DateTime? @db.Timestamp()
+
+  @@map("gallery")
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  subject   String   @db.VarChar(100)
+  name      String   @db.VarChar(100)
+  email     String   @db.VarChar(100)
+  message   String   @db.Text
+  createdAt DateTime @default(now()) @db.Timestamp()
+
+  @@map("contact")
+}
+
+model Site {
+  id       Int    @id @default(autoincrement())
+  aboutUs  String @db.VarChar(100)
+  vision   String @db.VarChar(100)
+  mision   String @db.VarChar(100)
+  email    String @db.VarChar(100)
+  contact  String @db.VarChar(100)
+  location String @db.VarChar(100)
+
+  @@map("site")
+}
+
+enum Role {
+  ADMIN  @map("Admin")
+  WAITER @map("Waiter")
+  CHEF   @map("Chef")
+}
+
+enum Category {
+  APPETIZER   @map("Appetizer")
+  MAIN_COURSE @map("Main Course")
+  DESSERT     @map("Dessert")
+  BEVERAGE    @map("Beverage")
+  SALAD       @map("Salad")
+  SOUP        @map("Soup")
+  SIDE_DISH   @map("Side Dish")
+  SNACK       @map("Snack")
+  BREAKFAST   @map("Breakfast")
+  SEAFOOD     @map("Seafood")
+  VEGETARIAN  @map("Vegetarian")
+  GRILL       @map("Grill")
+  PASTA       @map("Pasta")
+  PIZZA       @map("Pizza")
+}
+
+enum Method {
+  CASH @map("Tunai")
+  CARD @map("Kartu")
+}
+
+enum Status {
+  PENDING   @map("Tertunda")
+  PROGRESS  @map("Progress")
+  COMPLETED @map("Selesai")
+}

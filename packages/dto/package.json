@@ -1,0 +1,22 @@
+{
+  "name": "@repo/dto",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2"
+  },
+  "exports": {
+    ".": [
+      "./dist/index.js"
+    ]
+  }
+}
