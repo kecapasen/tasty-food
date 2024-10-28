@@ -30,6 +30,11 @@ export class MenuService {
         where: {
           deletedAt: { equals: null },
         },
+        orderBy: [
+          {
+            id: 'desc',
+          },
+        ],
       })
     ).map((menu: Menu): GetMenuDTO => {
       return {

@@ -21,26 +21,70 @@ import {
 } from "@/components/ui/carousel";
 import { Menu, Ellipsis } from "lucide-react";
 import Footer from "@/components/footer";
-const BeritaSeeder = [
-  "/sanket-shah-SVA7TyHxojY-unsplash.jpg",
-  "/jimmy-dean-Jvw3pxgeiZw-unsplash.jpg",
-  "/sebastian-coman-photography-eBmyH7oO5wY-unsplash.jpg",
-  "/luisa-brimble-HvXEbkcXjSk-unsplash.jpg",
-];
-const GaleriSeeder = [
-  "/brooke-lark-oaz0raysASk-unsplash.jpg",
-  "/ella-olsson-mmnKI8kMxpc-unsplash.jpg",
-  "/eiliv-aceron-ZuIDLSz3XLg-unsplash.jpg",
-  "/jonathan-borba-Gkc_xM3VY34-unsplash.jpg",
-  "/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg",
-  "/monika-grabkowska-P1aohbiT-EY-unsplash.jpg",
-];
-export default function Home() {
+import { useQuery } from "@tanstack/react-query";
+import { GetGalleryDTO, GetMenuDTO, GetNewsDTO } from "@repo/dto";
+import { get } from "./util/http-request";
+import Spinner from "./components/spinner";
+import SlateNews from "./admin/galeri/slate";
+import { Type } from "@repo/db";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatDistanceToNow } from "date-fns";
+import { id } from "date-fns/locale";
+import { useEffect, useState } from "react";
+
+const Home = () => {
+  const [featuredArticle, setFeaturedArticle] = useState<GetNewsDTO | null>(
+    null
+  );
+  const [remainingArticles, setRemainingArticles] = useState<GetNewsDTO[]>([]);
+  const menu = useQuery<{
+    data: GetMenuDTO[];
+  }>({
+    queryKey: ["menu"],
+    queryFn: async () => {
+      return await get("/menu");
+    },
+  });
+  const news = useQuery<{
+    data: GetNewsDTO[];
+  }>({
+    queryKey: ["news"],
+    queryFn: async () => {
+      return await get("/news");
+    },
+  });
+  const gallery = useQuery<{
+    data: GetGalleryDTO[];
+  }>({
+    queryKey: ["gallery"],
+    queryFn: async () => {
+      return await get("/gallery");
+    },
+  });
+  useEffect(() => {
+    if (news.data?.data) {
+      try {
+        const newsArray = news.data.data;
+        if (newsArray.length > 0) {
+          const [firstArticle, ...restArticles] = newsArray;
+          setFeaturedArticle(firstArticle!);
+          setRemainingArticles(restArticles.slice(0, 4));
+        } else {
+          setFeaturedArticle(null);
+          setRemainingArticles([]);
+        }
+      } catch (error) {
+        console.error("Error processing news data:", error);
+        setFeaturedArticle(null);
+        setRemainingArticles([]);
+      }
+    }
+  }, [news.data]);
   return (
-    <div className="min-h-dvh overflow-x-hidden font-bold text-stone-800 relative">
-      <div className="p-4 sm:p-16 bg-slate-100 z-50">
+    <div className="min-h-dvh overflow-x-hidden text-primary relative">
+      <div className="p-4 sm:p-16 bg-secondary z-50">
         <div className="relative flex flex-row-reverse sm:flex-row justify-between sm:justify-start items-center gap-2 sm:gap-4">
-          <p className="text-lg">TASTY FOOD</p>
+          <p className="font-bold text-lg">TASTY FOOD</p>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" className="inline sm:hidden p-0">
@@ -63,25 +107,25 @@ export default function Home() {
             </SheetContent>
           </Sheet>
           <div className="hidden sm:flex sm:items-center sm:gap-2">
-            <Button variant="link" className="text-sm rounded-none">
+            <Button variant="link" className="font-bold text-sm rounded-none">
               <Link href={"/"}>HOME</Link>
             </Button>
-            <Button variant="link" className="text-sm rounded-none">
+            <Button variant="link" className="font-bold text-sm rounded-none">
               <Link href={"/tentang"}>TENTANG</Link>
             </Button>
-            <Button variant="link" className="text-sm rounded-none">
+            <Button variant="link" className="font-bold text-sm rounded-none">
               <Link href={"/berita"}>BERITA</Link>
             </Button>
-            <Button variant="link" className="text-sm rounded-none">
+            <Button variant="link" className="font-bold text-sm rounded-none">
               <Link href={"/galeri"}>GALERI</Link>
             </Button>
-            <Button variant="link" className="text-sm rounded-none">
+            <Button variant="link" className="font-bold text-sm rounded-none">
               <Link href={"/kontak"}>KONTAK</Link>
             </Button>
           </div>
         </div>
       </div>
-      <div className="px-4 py-16 sm:px-16 bg-slate-100">
+      <div className="px-4 py-16 sm:px-16 bg-secondary">
         <div className="hidden sm:block absolute -top-32 -right-32 h-[600px] w-[600px]">
           <Image
             src="/img-4-2000x2000.png"
@@ -93,19 +137,19 @@ export default function Home() {
           />
         </div>
         <div className="flex flex-col justify-start gap-4 sm:max-w-[40%]">
-          <Separator className="h-[2px] w-14 bg-stone-800 rounded-full" />
-          <p className="font-normal text-4xl">
+          <Separator className="h-[2px] w-14 bg-primary rounded-full" />
+          <p className="text-4xl">
             HEALTHY
             <br />
             <span className="font-black">TASTY FOOD</span>
           </p>
-          <p className="font-normal text-sm">
+          <p className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis odit
             modi quis facere ea dolorem repellat cumque enim, tempore et quidem!
             Nihil deserunt voluptatem veritatis deleniti qui quae eos ad.
           </p>
           <Button className="rounded-none w-48 text-sm bg-stone-950">
-            <Link href={"/tentang"} className="text-white">
+            <Link href={"/tentang"} className="font-bold text-white ">
               TENTANG KAMI
             </Link>
           </Button>
@@ -113,13 +157,13 @@ export default function Home() {
       </div>
       <div className="px-4 py-16 sm:px-16 flex justify-center items-center">
         <div className="flex flex-col justify-center items-center gap-4 text-center sm:max-w-[40%]">
-          <p className="text-3xl">TENTANG KAMI</p>
-          <p className="font-normal text-sm">
+          <p className="text-3xl font-bold">TENTANG KAMI</p>
+          <p className="text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis odit
             modi quis facere ea dolorem repellat cumque enim, tempore et quidem!
             Nihil deserunt voluptatem veritatis deleniti qui quae eos ad.
           </p>
-          <Separator className="h-[2px] w-14 bg-stone-800 rounded-full" />
+          <Separator className="h-[2px] w-14 bg-primary rounded-full" />
         </div>
       </div>
       <div className="flex justify-center items-center relative h-[512px] sm:h-auto">
@@ -133,182 +177,178 @@ export default function Home() {
           quality={100}
         />
         <div className="absolute flex justify-center items-center px-4 py-16 sm:px-16 max-w-full">
-          <Carousel
-            opts={{
-              align: "start",
-            }}
-            className="w-full select-none"
-          >
-            <CarouselContent>
-              {Array.from({ length: 4 }).map((_, index) => (
-                <CarouselItem
-                  key={index}
-                  className="basis-full md:basis-1/2 lg:basis-1/4"
-                >
-                  <div>
-                    <Card className="flex justify-center items-center relative">
-                      <Image
-                        src={`/img-${index + 1}.png`}
-                        alt="Dekorasi"
-                        height={200}
-                        width={200}
-                        className="absolute -top-[100px]"
-                        priority
-                        quality={100}
-                      />
-                      <CardContent className="px-4 py-8 flex flex-col-reverse items-center gap-4 h-64">
-                        <p className="font-normal text-sm text-stone-600 text-center">
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Numquam deserunt ipsum cum dolorum deleniti,
-                          doloribus totam!
-                        </p>
-                        <p className="text-3xl">LOREM IPSUM</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-              {Array.from({ length: 4 }).map((_, index) => (
-                <CarouselItem
-                  key={index}
-                  className="basis-full md:basis-1/2 lg:basis-1/4"
-                >
-                  <div>
-                    <Card className="flex justify-center items-center relative">
-                      <Image
-                        src={`/img-${index + 1}.png`}
-                        alt="Dekorasi"
-                        height={200}
-                        width={200}
-                        className="absolute -top-[100px]"
-                        priority
-                        quality={100}
-                      />
-                      <CardContent className="px-4 py-8 flex flex-col-reverse items-center gap-4 h-64">
-                        <p className="font-normal text-sm text-stone-600 text-center">
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Numquam deserunt ipsum cum dolorum deleniti,
-                          doloribus totam!
-                        </p>
-                        <p className="text-3xl">LOREM IPSUM</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
-      </div>
-      <div className="flex justify-center items-center bg-slate-100">
-        <div className="px-4 py-16 sm:px-16 flex flex-col justify-center items-center gap-16 max-w-full">
-          <p className="text-3xl text-center">BERITA KAMI</p>
-          <div className="grid grid-cols-2 gap-2">
-            <Card className="overflow-hidden h-full">
-              <CardContent className="flex flex-col p-0 h-full">
-                <div className="h-full w-full aspect-square relative">
-                  <Image
-                    src={"/fathul-abrar-T-qI_MI2EMA-unsplash.jpg"}
-                    alt="Dekorasi"
-                    fill={true}
-                    className="object-cover"
-                    priority
-                    quality={100}
-                  />
-                </div>
-                <div className="flex flex-col justify-between h-full p-4">
-                  <div className="flex flex-col gap-4">
-                    <p className="text-2xl">
-                      LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT
-                    </p>
-                    <p className="font-normal text-sm text-stone-600">
-                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                      Sit iure totam, ipsum tempore soluta neque maiores fuga.
-                      Assumenda deserunt, blanditiis quibusdam, necessitatibus,
-                      quaerat cum distinctio ipsum animi nemo veniam dicta.
-                      Pariatur deleniti sit aut commodi laudantium. Debitis
-                      neque culpa nesciunt temporibus qui sit. Illum dignissimos
-                      odio aspernatur. Cum suscipit a, ex illum eligendi
-                      mollitia, enim asperiores, facere animi voluptas
-                      voluptatum.
-                    </p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <p className="font-normal text-sm text-amber-500">
-                      Baca selengkapnya
-                    </p>
-                    <Ellipsis className="h-5 w-5" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <div className="grid grid-cols-2 gap-2">
-              {BeritaSeeder.map((image: string, index: number) => {
-                return (
-                  <Card
-                    className="flex flex-col overflow-hidden h-full"
+          {menu.isPending && <Spinner />}
+          {Array.isArray(menu.data?.data) && (
+            <Carousel
+              opts={{
+                align: "start",
+              }}
+              className="w-full select-none"
+            >
+              <CarouselContent>
+                {menu.data!.data.map((item, index) => (
+                  <CarouselItem
                     key={index}
+                    className="basis-full md:basis-1/2 lg:basis-1/4"
                   >
-                    <CardContent className="flex flex-col p-0 h-full">
-                      <div className="h-full w-full aspect-video relative">
+                    <div>
+                      <Card className="flex justify-center items-center relative z-50">
                         <Image
-                          src={image}
+                          src={item.image}
                           alt="Dekorasi"
-                          fill={true}
-                          className="object-cover"
+                          height={200}
+                          width={200}
+                          className="absolute -top-[100px]"
                           priority
                           quality={100}
                         />
-                      </div>
-                      <div className="flex flex-col justify-between gap-4 h-full p-4">
-                        <div className="flex flex-col gap-4">
-                          <p className="text-2xl">LOREM IPSUM</p>
-                          <p className="font-normal text-sm text-stone-600">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing
-                            elit. Sit iure totam, ipsum tempore soluta neque
-                            maiores fuga.
+                        <CardContent className="px-4 py-8 flex flex-col-reverse items-center gap-4 h-64">
+                          <p className="font-normal text-sm text-center">
+                            {item.description}
                           </p>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <p className="font-normal text-sm text-amber-500">
-                            Baca selengkapnya
-                          </p>
-                          <Ellipsis className="h-5 w-5" />
-                        </div>
+                          <p className="font-bold text-3xl">{item.name}</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-center items-center bg-secondary">
+        <div className="px-4 py-16 sm:px-16 flex flex-col justify-center items-center gap-16 max-w-full">
+          <p className="font-bold text-3xl text-center">BERITA KAMI</p>
+          <div className="grid grid-cols-2 gap-2">
+            {featuredArticle && (
+              <Link href={`/berita/${featuredArticle.id}`}>
+                <Card className="overflow-hidden h-full group">
+                  <CardContent className="flex flex-col p-0 h-full">
+                    <div className="h-full w-full aspect-square relative overflow-hidden">
+                      <Image
+                        src={featuredArticle?.headerImage || ""}
+                        alt="Dekorasi"
+                        fill={true}
+                        className="object-cover group-hover:brightness-75 group-hover:scale-110 transition-all duration-300 ease-in-out"
+                        priority
+                        quality={100}
+                      />
+                    </div>
+                    <div className="flex flex-col justify-between h-full p-4">
+                      <div className="flex flex-col gap-4">
+                        <p className="font-bold text-2xl">
+                          {featuredArticle?.title}
+                        </p>
+                        <SlateNews item={featuredArticle} />
                       </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-amber-500">
+                          Baca selengkapnya
+                        </p>
+                        <Ellipsis className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
+            {news.isPending && <Spinner />}
+            <div className="grid grid-cols-2 grid-rows-2 gap-2">
+              {remainingArticles.length > 0 &&
+                remainingArticles.map((item, index) => {
+                  return (
+                    <Link href={`/berita/${item.id}`} key={index}>
+                      <Card className="flex flex-col overflow-hidden h-full group">
+                        <CardContent className="flex flex-col p-0 h-full">
+                          <div className="h-full w-full aspect-video relative overflow-hidden">
+                            <Image
+                              src={item.headerImage}
+                              alt="Dekorasi"
+                              fill={true}
+                              className="object-cover group-hover:brightness-75 group-hover:scale-110 transition-all duration-300 ease-in-out"
+                              priority
+                              quality={100}
+                            />
+                          </div>
+                          <div className="flex flex-col justify-between gap-4 h-full p-4">
+                            <div className="flex flex-col gap-4">
+                              <p className="font-bold text-2xl">{item.title}</p>
+                              <SlateNews item={item} />
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <p className="text-sm text-amber-500">
+                                Baca selengkapnya
+                              </p>
+                              <Ellipsis className="h-4 w-4" />
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
             </div>
           </div>
         </div>
       </div>
       <div className="flex justify-center items-center">
         <div className="px-4 py-16 sm:px-16 flex flex-col justify-center items-center gap-16 w-full">
-          <p className="text-3xl">GALERI KAMI</p>
+          <p className="font-bold text-3xl">GALERI KAMI</p>
+          {gallery.isPending && <Spinner />}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-2 gap-y-4 w-full">
-            {GaleriSeeder.map((item, index) => {
-              return (
-                <Card
-                  key={index}
-                  className="flex flex-col overflow-hidden h-full"
-                >
-                  <CardContent className="flex flex-col p-0 h-full aspect-square relative">
-                    <Image
-                      src={item}
-                      alt="Dekorasi"
-                      fill={true}
-                      className="w-auto h-full object-cover"
-                      priority
-                      quality={100}
-                    />
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {Array.isArray(gallery.data?.data) &&
+              gallery.data.data
+                .filter((value) => value.type === Type.CONTENT)
+                .map((item, index) => {
+                  return (
+                    <Card
+                      key={index}
+                      className="flex flex-col overflow-hidden h-full"
+                    >
+                      <CardContent className="flex flex-col p-0 h-full aspect-square relative group">
+                        <Image
+                          src={item.image}
+                          alt="Dekorasi"
+                          fill={true}
+                          className="object-cover group-hover:brightness-75 group-hover:scale-110 transition-all duration-300 ease-in-out"
+                          priority
+                          quality={100}
+                        />
+                        <div className="absolute -bottom-full left-0 right-0 group-hover:bottom-0 transition-all ease-in-out duration-300 bg-gradient-to-t from-primary w-full z-10 p-4">
+                          <div className="flex items-center gap-2">
+                            <Avatar>
+                              <AvatarImage
+                                src={item.user.avatar || undefined}
+                                alt="Dekorator"
+                              />
+                              <AvatarFallback className="font-semibold text-xs">
+                                {item.user.fullname
+                                  .split(" ")
+                                  .map((data: string) => data[0]?.toUpperCase())
+                                  .join("")}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col gap-1">
+                              <p className="text-primary-foreground font-semibold text-sm">
+                                {item.user.fullname}
+                              </p>
+                              <p className="text-muted text-xs">
+                                {formatDistanceToNow(new Date(item.createdAt), {
+                                  addSuffix: true,
+                                  includeSeconds: true,
+                                  locale: id,
+                                })}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
           </div>
-          <Button className="rounded-none w-48 text-sm bg-stone-950">
+          <Button className="font-bold rounded-none w-48 text-sm bg-stone-950">
             LIHAT LEBIH BANYAK
           </Button>
         </div>
@@ -316,4 +356,6 @@ export default function Home() {
       <Footer />
     </div>
   );
-}
+};
+
+export default Home;

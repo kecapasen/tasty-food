@@ -47,6 +47,18 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+        },
+        warn: {
+          DEFAULT: "hsl(var(--warn))",
+        },
+        error: {
+          DEFAULT: "hsl(var(--error))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

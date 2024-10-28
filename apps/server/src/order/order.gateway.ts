@@ -1,29 +1,28 @@
 import {
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
   WsResponse,
 } from '@nestjs/websockets';
 import { OrderService } from './order.service';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { StaffOnly } from 'src/auth/auth.decorator';
-import { Role } from '@repo/db';
 import { GetOrderDTO, ResponseDTO } from '@repo/dto';
+import { Server } from 'socket.io';
 
-@WebSocketGateway({ cors: '*' })
+@WebSocketGateway(8080, {
+  cors: {
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 export class OrderGateway {
   constructor(private readonly orderService: OrderService) {}
+  @WebSocketServer()
+  server: Server;
 
-  @UseGuards(JwtAuthGuard)
-  @StaffOnly(Role.ADMIN)
-  @SubscribeMessage('createOrder')
-  async handleMessage(): Promise<
-    WsResponse<ResponseDTO & { data?: GetOrderDTO[] }>
-  > {
+  @SubscribeMessage('getOrder')
+  async handleMessage(): Promise<void> {
     const data = await this.orderService.getAllOrders();
-    return {
-      event: 'updateOrder',
-      data,
-    };
+    this.server.emit('updateOrder', data);
   }
 }

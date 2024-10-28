@@ -30,6 +30,11 @@ export class UserService {
         NOT: { userId },
         deletedAt: null,
       },
+      orderBy: [
+        {
+          role: 'asc',
+        },
+      ],
     });
     const userResponses: GetUserDTO[] = users.map(
       (user: User): GetUserDTO => ({

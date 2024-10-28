@@ -45,10 +45,11 @@ export class OrderController {
     @User('userId', ParseIntPipe) userId: number,
     @Body() createOrderDTO: CreateOrderDTO,
   ): Promise<ResponseDTO> {
+    console.log(createOrderDTO);
     return await this.orderService.createOrder(userId, createOrderDTO);
   }
   @UseGuards(JwtAuthGuard)
-  @StaffOnly(Role.CHEF, Role.WAITER)
+  @StaffOnly(Role.CHEF)
   @Patch(':orderId')
   public async updateOrderStatus(
     @Param('orderId', ParseIntPipe) orderId: number,

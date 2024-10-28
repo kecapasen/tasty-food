@@ -1,6 +1,5 @@
 import { IsNumber, IsEnum, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
-import { Method } from "@repo/db";
 
 export class CreateOrderDetailDTO {
   @IsNumber()
@@ -14,8 +13,6 @@ export class CreateOrderDetailDTO {
 }
 
 export class CreateOrderDTO {
-  @IsEnum(Method)
-  public readonly method!: Method;
   @IsNumber()
   public readonly total!: number;
   @ValidateNested()

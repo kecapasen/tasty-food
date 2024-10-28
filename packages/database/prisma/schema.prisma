@@ -49,7 +49,6 @@ model Order {
   id          Int           @id @default(autoincrement())
   user        User          @relation(fields: [userId], references: [userId], onUpdate: Restrict, onDelete: Restrict)
   userId      Int
-  method      Method
   total       Int
   status      Status        @default(PENDING)
   orderDetail OrderDetail[]
@@ -59,14 +58,15 @@ model Order {
 }
 
 model OrderDetail {
-  id       Int   @id @default(autoincrement())
-  order    Order @relation(fields: [orderId], references: [id], onUpdate: Restrict, onDelete: Restrict)
-  menu     Menu  @relation(fields: [menuId], references: [id], onUpdate: Restrict, onDelete: Restrict)
-  orderId  Int
-  menuId   Int
-  price    Int
-  quantity Int   @default(1)
-  total    Int
+  id        Int      @id @default(autoincrement())
+  order     Order    @relation(fields: [orderId], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  menu      Menu     @relation(fields: [menuId], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  orderId   Int
+  menuId    Int
+  price     Int
+  quantity  Int      @default(1)
+  total     Int
+  createdAt DateTime @default(now()) @db.Timestamp()
 
   @@map("orderDetail")
 }
@@ -112,6 +112,7 @@ model Gallery {
   user      User      @relation(fields: [userId], references: [userId], onUpdate: Cascade, onDelete: Cascade)
   userId    Int
   image     String    @db.Text
+  type      Type
   createdAt DateTime  @default(now()) @db.Timestamp()
   updatedAt DateTime? @db.Timestamp()
   deletedAt DateTime? @db.Timestamp()
@@ -132,9 +133,9 @@ model Contact {
 
 model Site {
   id       Int    @id @default(autoincrement())
-  aboutUs  String @db.VarChar(100)
-  vision   String @db.VarChar(100)
-  mision   String @db.VarChar(100)
+  aboutUs  String @db.Text
+  vision   String @db.Text
+  mision   String @db.Text
   email    String @db.VarChar(100)
   contact  String @db.VarChar(100)
   location String @db.VarChar(100)
@@ -144,8 +145,8 @@ model Site {
 
 enum Role {
   ADMIN  @map("Admin")
-  WAITER @map("Waiter")
   CHEF   @map("Chef")
+  WAITER @map("Waiter")
 }
 
 enum Category {
@@ -165,9 +166,9 @@ enum Category {
   PIZZA       @map("Pizza")
 }
 
-enum Method {
-  CASH @map("Tunai")
-  CARD @map("Kartu")
+enum Type {
+  SLIDER  @map("Slider")
+  CONTENT @map("Content")
 }
 
 enum Status {

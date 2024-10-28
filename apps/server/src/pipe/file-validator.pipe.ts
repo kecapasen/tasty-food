@@ -24,7 +24,7 @@ export class FileValidatorPipe implements PipeTransform {
         fileType: /^image\//,
       })
       .addMaxSizeValidator({
-        maxSize: 5e6, // 5 MB
+        maxSize: 1e7,
       })
       .build({
         errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,

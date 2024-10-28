@@ -10,6 +10,7 @@ import { Payload } from './interfaces';
 import { Response } from 'express';
 import { addDays } from 'date-fns';
 import { ConfigService } from '@nestjs/config';
+import { GetUserDTO, ResponseDTO } from '@repo/dto';
 
 @Injectable()
 export class AuthService {
@@ -24,8 +25,9 @@ export class AuthService {
     );
     if (!data) throw new NotFoundException();
     if (data.password !== pass) throw new UnauthorizedException();
-    return { userId: data.userId };
+    return { userId: data.userId, role: data.role };
   }
+
   public async signin(payload: Payload, res: Response) {
     const expire = addDays(new Date(), 7);
     const token = this.jwtService.sign(payload, {
@@ -34,6 +36,13 @@ export class AuthService {
     res.cookie('Authentication', token, {
       expires: expire,
     });
-    return payload;
+    return { ...payload, acces_token: token };
+  }
+
+  public async getMe(
+    userId: number,
+  ): Promise<ResponseDTO & { data?: GetUserDTO }> {
+    const { data } = await this.userService.getUserById(userId);
+    return { message: 'User berhasil diambil', statusCode: 200, data };
   }
 }

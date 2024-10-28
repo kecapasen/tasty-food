@@ -46,7 +46,7 @@ export class MenuController {
   public async createMenu(
     @User('userId', ParseIntPipe) userId: number,
     @Body() createMenuDTO: CreateMenuDTO,
-    @UploadedFile(new FileValidatorPipe(true))
+    @UploadedFile()
     file: Express.Multer.File,
   ): Promise<ResponseDTO> {
     return await this.menuService.createMenu(userId, createMenuDTO, file);

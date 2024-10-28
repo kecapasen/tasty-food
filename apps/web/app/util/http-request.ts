@@ -1,45 +1,52 @@
-"use server";
+"use client";
 import { instance } from "@/lib";
 import { AxiosRequestConfig } from "axios";
 
-export const get = async (path: string, options?: AxiosRequestConfig) => {
+export const get = async (path: string, config?: AxiosRequestConfig) => {
   try {
     const response = await instance.get(path, {
-      ...options,
+      ...config,
     });
     return response.data;
   } catch (error: any) {
-    console.log(error);
-    return error.message;
+    if (error.response) throw new Error(error.response.data.message);
+    throw new Error(error.message);
   }
 };
-export const post = async (path: string, options?: AxiosRequestConfig) => {
+export const post = async (
+  path: string,
+  data: any,
+  config?: AxiosRequestConfig
+) => {
   try {
-    const response = await instance.post(path, {
-      ...options,
-    });
-    return response;
+    const response = await instance.post(path, data, { ...config });
+    return response.data;
   } catch (error: any) {
-    return error.message;
+    if (error.response) throw new Error(error.response.data.message);
+    throw new Error(error.message);
   }
 };
-export const patch = async (path: string, options?: AxiosRequestConfig) => {
+export const patch = async (
+  path: string,
+  data: any,
+  config?: AxiosRequestConfig
+) => {
   try {
-    const response = await instance.patch(path, {
-      ...options,
-    });
-    return response;
+    const response = await instance.patch(path, data, { ...config });
+    return response.data;
   } catch (error: any) {
-    return error.message;
+    if (error.response) throw new Error(error.response.data.message);
+    throw new Error(error.message);
   }
 };
-export const del = async (path: string, options?: AxiosRequestConfig) => {
+export const del = async (path: string, config?: AxiosRequestConfig) => {
   try {
     const response = await instance.delete(path, {
-      ...options,
+      ...config,
     });
-    return response;
+    return response.data;
   } catch (error: any) {
-    return error.message;
+    if (error.response) throw new Error(error.response.data.message);
+    throw new Error(error.message);
   }
 };

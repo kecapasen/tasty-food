@@ -8,6 +8,7 @@ import {
   UpdateOrderDTO,
 } from '@repo/dto';
 import { PrismaService } from 'src/lib';
+import { TZDate } from '@date-fns/tz';
 
 interface IOrderDetail extends OrderDetail {
   menu: Menu;
@@ -29,11 +30,11 @@ export class OrderService {
   > {
     const orders = await this.prismaService.order.findMany({
       include: { user: true, orderDetail: { include: { menu: true } } },
+      orderBy: [{ id: 'desc' }],
     });
     const orderResponses: GetOrderDTO[] = orders.map(
       (order: IOrder): GetOrderDTO => ({
         id: order.id,
-        method: order.method,
         total: order.total,
         status: order.status,
         createdAt: order.createdAt,
@@ -77,7 +78,6 @@ export class OrderService {
     if (!order) throw new NotFoundException('Pesanan tidak ditemukan');
     const orderResponse: GetOrderDTO = {
       id: order.id,
-      method: order.method,
       total: order.total,
       status: order.status,
       createdAt: order.createdAt,
@@ -108,16 +108,29 @@ export class OrderService {
     userId: number,
     createOrderDTO: CreateOrderDTO,
   ): Promise<ResponseDTO> {
+    const date = new TZDate(new Date(), 'Asia/Jakarta');
     await this.prismaService.order.create({
       data: {
         ...createOrderDTO,
+        createdAt: date,
         orderDetail: {
           createMany: {
-            data: createOrderDTO.orderDetail,
+            data: createOrderDTO.orderDetail.map((detail) => ({
+              ...detail,
+              createdAt: date,
+            })),
           },
         },
         user: { connect: { userId } },
       },
+    });
+    const cart = await this.prismaService.cart.findUnique({
+      where: {
+        userId,
+      },
+    });
+    await this.prismaService.cartDetail.deleteMany({
+      where: { cartId: cart?.id },
     });
     return { message: 'Pesanan berhasil dibuat', statusCode: 201 };
   }

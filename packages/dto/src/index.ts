@@ -6,4 +6,5 @@ export * from "./news";
 export * from "./order";
 export * from "./report";
 export * from "./user";
+export * from "./site";
 export * from "./response.dto";

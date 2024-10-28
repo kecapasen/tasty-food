@@ -7,11 +7,12 @@ import { Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 const CardMenu = ({ menu }: { menu: GetMenuDTO }) => {
   return (
     <Card>
-      <CardContent className="flex flex-col p-0">
+      <CardContent className="flex flex-col p-0 h-full">
         <div className="w-full h-48 aspect-square relative group">
           <Image
             src={menu.image}
@@ -21,14 +22,11 @@ const CardMenu = ({ menu }: { menu: GetMenuDTO }) => {
             priority
             quality={100}
           />
-          <Badge className="absolute top-4 left-4 z-10 bg-rose-500 hover:bg-rose-600">
-            Best Seller🔥
-          </Badge>
         </div>
         <div className="px-4">
           <Separator />
         </div>
-        <div className="p-4 flex flex-col gap-4">
+        <div className="p-4 flex flex-col justify-between gap-4 flex-grow">
           <div className="flex justify-between">
             <div className="flex flex-col gap-1 font-semibold">
               <p className="text-sm">{menu.name}</p>
@@ -41,8 +39,8 @@ const CardMenu = ({ menu }: { menu: GetMenuDTO }) => {
               <Badge>{menu.category}</Badge>
             </div>
           </div>
-          <Button variant="outline" size="sm">
-            Edit
+          <Button asChild variant="outline" size="sm">
+            <a href={`/admin/menu/${menu.id}`}>Edit</a>
           </Button>
         </div>
       </CardContent>

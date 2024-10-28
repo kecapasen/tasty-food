@@ -153,6 +153,12 @@ export class ReportService {
       _sum: {
         quantity: true,
       },
+      where: {
+        createdAt: {
+          gte: startOfDay(dateRangeDTO.startDate),
+          lt: endOfDay(dateRangeDTO.endDate),
+        },
+      },
       orderBy: {
         _sum: {
           quantity: 'desc',
@@ -161,14 +167,14 @@ export class ReportService {
       take: 4,
     });
     const topSellingItemsChartData = await Promise.all(
-      topSellingItems.map(async (item) => {
+      topSellingItems.map(async (item, index) => {
         const menu = await this.prismaService.menu.findUnique({
           where: { id: item.menuId },
         });
         return {
           menu: menu?.name || 'Tidak diketahui',
           total: item._sum?.quantity || 0,
-          fill: `var(--color-${menu?.name?.toLowerCase() || 'unknown'})`,
+          fill: `var(--color-${menu?.name.replaceAll(' ', '_').toLowerCase() || 'tidak_diketahui'})`,
         };
       }),
     );

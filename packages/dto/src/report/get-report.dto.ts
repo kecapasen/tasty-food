@@ -9,7 +9,7 @@ import {
 import { Type } from "class-transformer";
 import { Status } from "@repo/db";
 
-class GetSalesByHourDTO {
+export class GetSalesByHourDTO {
   @IsString()
   public readonly hour!: string;
   @IsNumber()
@@ -18,7 +18,7 @@ class GetSalesByHourDTO {
   public readonly yesterday!: number;
 }
 
-class GetOrderDTO {
+export class GetOrderReportDTO {
   @IsNumber()
   public readonly id!: number;
   @IsNumber()
@@ -29,14 +29,14 @@ class GetOrderDTO {
   public readonly createdAt!: Date;
 }
 
-class GetRevenueChartDataDTO {
+export class GetRevenueChartDataDTO {
   @IsString()
   public readonly date!: string;
   @IsNumber()
   public readonly revenueAmount!: number;
 }
 
-class GetTopSellingItemDTO {
+export class GetTopSellingItemDTO {
   @IsString()
   public readonly menu!: string;
   @IsNumber()
@@ -60,8 +60,8 @@ export class GetDashboardDTO {
   public readonly salesByHourData!: GetSalesByHourDTO[];
   @ValidateNested()
   @IsArray()
-  @Type(() => GetOrderDTO)
-  public readonly orders!: GetOrderDTO[];
+  @Type(() => GetOrderReportDTO)
+  public readonly orders!: GetOrderReportDTO[];
 }
 
 export class GetReportDTO {

@@ -12,16 +12,8 @@ export class ContactService {
       data?: GetContactDTO[];
     }
   > {
-    const contacts: GetContactDTO[] = (
-      await this.prismaService.contact.findMany()
-    ).map((contact: Contact): GetContactDTO => {
-      return {
-        subject: contact.subject,
-        name: contact.name,
-        email: contact.email,
-        message: contact.message,
-        createdAt: contact.createdAt,
-      };
+    const contacts = await this.prismaService.contact.findMany({
+      orderBy: [{ id: 'desc' }],
     });
     if (contacts.length < 1)
       throw new NotFoundException('Kontak tidak ditemukan');
@@ -42,17 +34,10 @@ export class ContactService {
       },
     });
     if (!contact) throw new NotFoundException('Kontak tidak ditemukan');
-    const contactData: GetContactDTO = {
-      subject: contact.subject,
-      name: contact.name,
-      email: contact.email,
-      message: contact.message,
-      createdAt: contact.createdAt,
-    };
     return {
       message: 'Kontak berhasil diambil',
       statusCode: 200,
-      data: contactData,
+      data: contact,
     };
   }
   public async createNewContact(

@@ -5,8 +5,10 @@ import {
   ValidateNested,
   IsOptional,
   IsNumber,
+  IsEnum,
 } from "class-validator";
 import { Type } from "class-transformer";
+import { Type as GalleryType } from "@repo/db";
 
 class GetUserDTO {
   @IsString()
@@ -21,6 +23,8 @@ export class GetGalleryDTO {
   public readonly id!: number;
   @IsUrl()
   public readonly image!: string;
+  @IsEnum(GalleryType)
+  public readonly type!: GalleryType;
   @ValidateNested()
   @Type(() => GetUserDTO)
   public readonly user!: GetUserDTO;

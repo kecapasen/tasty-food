@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import Layout from "@/components/layout";
+import React, { useEffect, useState } from "react";
+import Layout, { Pages } from "@/components/layout";
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -24,7 +24,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -37,164 +36,132 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { GetOrderDTO } from "@repo/dto";
+import { formatDistanceToNow } from "date-fns";
+import { id } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
+import { Status } from "@repo/db";
+import { toIDR } from "@/util";
+import { socket } from "@/socket";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const data: History[] = [
-  {
-    id: "110",
-    total: "Rp 77.000",
-    method: "Cash",
-    date: "2 menit yang lalu",
-    status: "Tertunda",
-  },
-  {
-    id: "109",
-    total: "Rp 120.000",
-    method: "Card",
-    date: "5 menit yang lalu",
-    status: "Progress",
-  },
-  {
-    id: "108",
-    total: "Rp 45.000",
-    method: "Cash",
-    date: "10 menit yang lalu",
-    status: "Selesai",
-  },
-  {
-    id: "107",
-    total: "Rp 98.500",
-    method: "Card",
-    date: "15 menit yang lalu",
-    status: "Selesai",
-  },
-  {
-    id: "106",
-    total: "Rp 250.000",
-    method: "Cash",
-    date: "20 menit yang lalu",
-    status: "Selesai",
-  },
-  {
-    id: "105",
-    total: "Rp 175.000",
-    method: "Card",
-    date: "30 menit yang lalu",
-    status: "Selesai",
-  },
-];
-
-export type History = {
-  id: string;
-  total: string;
-  method: string;
-  date: string;
-  status: string;
-};
-
-export const columns: ColumnDef<History>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }: { row: any }) => {
-      return <p className="font-semibold line-clamp-1">{row.getValue("id")}</p>;
+const History = () => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [orderData, setOrderData] = useState<GetOrderDTO[]>([]);
+  const [isPending, setIsPending] = useState<boolean>(true);
+  const columns: ColumnDef<GetOrderDTO>[] = [
+    {
+      accessorKey: "id",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            No Pesanan
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-1">
+          <p className="capitalize font-semibold line-clamp-1">
+            {`#${row.original.id}`}
+          </p>
+          <p className="text-xs">
+            {formatDistanceToNow(new Date(row.original.createdAt), {
+              locale: id,
+              addSuffix: true,
+              includeSeconds: true,
+            })}
+          </p>
+        </div>
+      ),
     },
-  },
-  {
-    accessorKey: "total",
-    header: ({ column }: { column: any }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <Badge
+          variant={
+            row.original.status === Status.COMPLETED
+              ? "default"
+              : row.original.status === Status.PROGRESS
+                ? "secondary"
+                : row.original.status === Status.PENDING
+                  ? "outline"
+                  : "destructive"
+          }
+          className="line-clamp-1"
         >
-          Total
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
+          {row.original.status}
+        </Badge>
+      ),
     },
-    cell: ({ row }: { row: any }) => (
-      <p className="capitalize font-semibold line-clamp-1">
-        {row.getValue("total")}
-      </p>
-    ),
-  },
-  {
-    accessorKey: "method",
-    header: "Metode",
-    cell: ({ row }: { row: any }) => (
-      <p className="capitalize line-clamp-1">{row.getValue("method")}</p>
-    ),
-  },
-  {
-    accessorKey: "date",
-    header: "Waktu",
-    cell: ({ row }: { row: any }) => (
-      <p className="line-clamp-1">{row.getValue("date")}</p>
-    ),
-  },
-  {
-    accessorKey: "status",
-    header: () => {
-      return <p className="text-center">Status</p>;
+    {
+      accessorKey: "total",
+      header: "Total",
+      cell: ({ row }) => (
+        <div className="capitalize line-clamp-1">
+          {toIDR(row.original.total)}
+        </div>
+      ),
     },
-    cell: ({ row }: { row: any }) => (
-      <Badge
-        className={`w-full text-xs ${
-          row.getValue("status") === "Selesai"
-            ? "bg-emerald-500"
-            : row.getValue("status") === "Progress"
-            ? "bg-sky-500"
-            : row.getValue("status") === "Tertunda" && "bg-amber-500"
-        }`}
-      >
-        {row.getValue("status")}
-      </Badge>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }: { row: any }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+    {
+      accessorKey: "user",
+      header: "Pelayan",
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Avatar>
+            <AvatarImage
+              src={row.original.user.avatar || undefined}
+              alt="Dekorator"
+            />
+            <AvatarFallback className="font-semibold">
+              {row.original.user.fullname
+                .split(" ")
+                .map((data: string) => data[0]?.toUpperCase())
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+          <p className="capitalize line-clamp-1">
+            {row.original.user.fullname}
+          </p>
+        </div>
+      ),
     },
-  },
-];
-
-const Riwayat = () => {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  navigator.clipboard.writeText(row.original.id.toString())
+                }
+              >
+                Salin ID
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
   const table = useReactTable({
-    data,
+    data: orderData || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -211,9 +178,19 @@ const Riwayat = () => {
       rowSelection,
     },
   });
+  useEffect(() => {
+    const onUpdateOrder = ({ data }: { data: GetOrderDTO[] }) => {
+      setOrderData([...data]);
+      setIsPending(false);
+    };
+    socket.emit("getOrder");
+    socket.on("updateOrder", onUpdateOrder);
+    return () => {
+      socket.off("updateOrder", onUpdateOrder);
+    };
+  }, []);
   return (
-    <Layout breadcrumb="Riwayat">
-      <Separator />
+    <Layout breadcrumb={[{ title: "Riwayat" }]} active={Pages.HISTORY}>
       <div className="w-full flex flex-col gap-4">
         <div className="flex justify-between items-center gap-4">
           <Input
@@ -234,8 +211,8 @@ const Riwayat = () => {
               <DropdownMenuContent align="end">
                 {table
                   .getAllColumns()
-                  .filter((column: any) => column.getCanHide())
-                  .map((column: any) => {
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
                     return (
                       <DropdownMenuCheckboxItem
                         key={column.id}
@@ -256,9 +233,9 @@ const Riwayat = () => {
         <div className="rounded-md border">
           <Table>
             <TableHeader>
-              {table.getHeaderGroups().map((headerGroup: any) => (
+              {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header: any) => {
+                  {headerGroup.headers.map((header) => {
                     return (
                       <TableHead key={header.id}>
                         {header.isPlaceholder
@@ -274,15 +251,32 @@ const Riwayat = () => {
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row: any) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell: any) => (
+              {isPending ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    Mohon tunggu...
+                  </TableCell>
+                </TableRow>
+              ) : table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                        <a
+                          href={`/admin/riwayat/${row.original.id}`}
+                          className="block w-full h-full"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </a>
                       </TableCell>
                     ))}
                   </TableRow>
@@ -293,7 +287,7 @@ const Riwayat = () => {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    Tidak ada data.
                   </TableCell>
                 </TableRow>
               )}
@@ -325,4 +319,4 @@ const Riwayat = () => {
   );
 };
 
-export default Riwayat;
+export default History;

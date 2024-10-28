@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -17,7 +18,7 @@ import { StaffOnly } from 'src/auth/auth.decorator';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { User } from 'src/auth/user.decorator';
 import { FileValidatorPipe } from 'src/pipe/file-validator.pipe';
-import { GetGalleryDTO, ResponseDTO } from '@repo/dto';
+import { CreateGalleryDTO, GetGalleryDTO, ResponseDTO } from '@repo/dto';
 import { Role } from '@repo/db';
 
 @Controller('gallery')
@@ -36,9 +37,14 @@ export class GalleryController {
   @UseInterceptors(FilesInterceptor('files'))
   public async createGallery(
     @User('userId', ParseIntPipe) userId: number,
+    @Body() createGalleryDTO: CreateGalleryDTO,
     @UploadedFiles(new FileValidatorPipe(true)) files: Express.Multer.File[],
   ): Promise<ResponseDTO> {
-    return await this.galleryService.createGallery(userId, files);
+    return await this.galleryService.createGallery(
+      userId,
+      files,
+      createGalleryDTO,
+    );
   }
   @UseGuards(JwtAuthGuard)
   @StaffOnly(Role.ADMIN)

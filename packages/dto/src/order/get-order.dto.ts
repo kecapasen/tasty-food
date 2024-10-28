@@ -8,7 +8,7 @@ import {
   IsOptional,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { Category, Method, Status } from "@repo/db";
+import { Category, Status } from "@repo/db";
 
 class GetMenuDTO {
   @IsString()
@@ -48,8 +48,6 @@ export class GetOrderDTO {
   @ValidateNested()
   @Type(() => GetUserDTO)
   public readonly user!: GetUserDTO;
-  @IsEnum(Method)
-  public readonly method!: Method;
   @IsNumber()
   public readonly total!: number;
   @IsEnum(Status)

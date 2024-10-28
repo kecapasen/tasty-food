@@ -2,6 +2,7 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
   WsResponse,
 } from '@nestjs/websockets';
 import { ReportService } from './report.service';
@@ -15,33 +16,29 @@ import {
   GetReportDTO,
   ResponseDTO,
 } from '@repo/dto';
+import { Server } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway(8080, {
+  cors: {
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 export class ReportGateway {
   constructor(private readonly reportService: ReportService) {}
+  @WebSocketServer()
+  server: Server;
 
-  @UseGuards(JwtAuthGuard)
-  @StaffOnly(Role.ADMIN)
   @SubscribeMessage('getDataDashboard')
-  async updateDashboard(): Promise<
-    WsResponse<ResponseDTO & { data?: GetDashboardDTO }>
-  > {
+  async updateDashboard(): Promise<void> {
     const data = await this.reportService.getDataDashboard();
-    return {
-      event: 'updateDashboard',
-      data,
-    };
+    this.server.emit('updateDashboard', data);
   }
-  @UseGuards(JwtAuthGuard)
-  @StaffOnly(Role.ADMIN)
+
   @SubscribeMessage('getDataReport')
-  async updateReport(
-    @MessageBody() dateRangeDTO: DateRangeDTO,
-  ): Promise<WsResponse<ResponseDTO & { data?: GetReportDTO }>> {
+  async updateReport(@MessageBody() dateRangeDTO: DateRangeDTO): Promise<void> {
     const data = await this.reportService.getReportData(dateRangeDTO);
-    return {
-      event: 'updateReport',
-      data,
-    };
+    this.server.emit('updateReport', data);
   }
 }

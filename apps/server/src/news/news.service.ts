@@ -1,3 +1,4 @@
+import { TZDate } from '@date-fns/tz';
 import {
   ConflictException,
   Injectable,
@@ -35,6 +36,11 @@ export class NewsService {
         where: {
           deletedAt: { equals: null },
         },
+        orderBy: [
+          {
+            id: 'desc',
+          },
+        ],
       })
     ).map((news: INews): GetNewsDTO => {
       return {
@@ -106,6 +112,7 @@ export class NewsService {
     await this.prismaService.news.create({
       data: {
         ...createNewsDTO,
+        createdAt: new TZDate(new Date(), 'Asia/Jakarta'),
         userId,
         headerImage: imageUrl.url,
       },
@@ -140,7 +147,10 @@ export class NewsService {
     }
     await this.prismaService.news.update({
       where: { id: newsId },
-      data: updateData,
+      data: {
+        ...updateData,
+        updatedAt: new TZDate(new Date(), 'Asia/Jakarta'),
+      },
     });
     return {
       message: 'Berita berhasil diperbarui',

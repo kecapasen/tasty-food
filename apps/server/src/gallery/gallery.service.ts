@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Gallery, User } from '@repo/db';
-import { GetGalleryDTO, ResponseDTO } from '@repo/dto';
+import { Gallery, Type, User } from '@repo/db';
+import { CreateGalleryDTO, GetGalleryDTO, ResponseDTO } from '@repo/dto';
 import { Bucket } from 'src/interfaces';
 import { PrismaService, SupabaseService } from 'src/lib';
 
@@ -35,6 +35,7 @@ export class GalleryService {
       return {
         id: gallery.id,
         image: gallery.image,
+        type: gallery.type,
         user: {
           fullname: gallery.user.fullname,
           avatar: gallery.user.avatar,
@@ -54,6 +55,7 @@ export class GalleryService {
   public async createGallery(
     userId: number,
     files: Express.Multer.File[],
+    createGalleryDTO: CreateGalleryDTO,
   ): Promise<ResponseDTO> {
     const uploadedUrls = await this.supabaseService.uploadFile(
       Bucket.GALLERY,
@@ -64,7 +66,7 @@ export class GalleryService {
       throw new ConflictException('Unggahan gagal');
     await this.prismaService.gallery.createMany({
       data: uploadedUrls.map((file: { url: string }) => {
-        return { image: file.url, userId };
+        return { userId, image: file.url, type: createGalleryDTO.type };
       }),
     });
     return {
@@ -78,7 +80,7 @@ export class GalleryService {
     file: Express.Multer.File,
   ): Promise<ResponseDTO> {
     const gallery = await this.prismaService.gallery.findUnique({
-      where: { id: galleryId, deletedAt: { equals: null } },
+      where: { id: galleryId, type: Type.SLIDER, deletedAt: { equals: null } },
     });
     if (!gallery) throw new NotFoundException('Galeri tidak ditemukan');
     const uploadedUrl = await this.supabaseService.uploadFile(
