@@ -3,24 +3,14 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
 import { ReportService } from './report.service';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { StaffOnly } from 'src/auth/auth.decorator';
-import { Role } from '@repo/db';
-import {
-  DateRangeDTO,
-  GetDashboardDTO,
-  GetReportDTO,
-  ResponseDTO,
-} from '@repo/dto';
+import { DateRangeDTO } from '@repo/dto';
 import { Server } from 'socket.io';
 
 @WebSocketGateway(8080, {
   cors: {
-    origin: ['http://localhost:3000'],
+    origin: ['http://152.42.252.147:3000'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
