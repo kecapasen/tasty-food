@@ -38,7 +38,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Trash2, UserRoundPlus } from "lucide-react";
-import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetUserDTO } from "@repo/dto";
 import { del, get } from "@/util/http-request";
@@ -251,18 +250,18 @@ const Employee = () => {
               className="h-auto hidden md:inline-flex items-center gap-2"
               size="sm"
             >
-              <Link href={"/admin/karyawan/tambah"}>
+              <a href={"/admin/karyawan/tambah"}>
                 <UserRoundPlus className="h-5 w-5" />
                 Tambah karyawan
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
         <Button asChild size="sm" className="flex md:hidden items-center gap-2">
-          <Link href={"/admin/karyawan/tambah"}>
+          <a href={"/admin/karyawan/tambah"}>
             <UserRoundPlus className="h-5 w-5" />
             Tambah karyawan
-          </Link>
+          </a>
         </Button>
         <div className="rounded-md border">
           <Table>

@@ -38,7 +38,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Feather, Trash2 } from "lucide-react";
-import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetNewsDTO } from "@repo/dto";
 import { del, get } from "@/util/http-request";
@@ -228,18 +227,18 @@ const News = () => {
               className="h-auto hidden md:inline-flex items-center gap-2"
               size="sm"
             >
-              <Link href={"/admin/berita/tambah"}>
+              <a href={"/admin/berita/tambah"}>
                 <Feather className="h-5 w-5" />
                 Buat berita
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
         <Button asChild size="sm" className="flex md:hidden items-center gap-2">
-          <Link href={"/admin/berita/tambah"}>
+          <a href={"/admin/berita/tambah"}>
             <Feather className="h-5 w-5" />
             Buat berita
-          </Link>
+          </a>
         </Button>
         <div className="rounded-md border">
           <Table>

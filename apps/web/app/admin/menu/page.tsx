@@ -7,7 +7,6 @@ import { GetMenuDTO } from "@repo/dto";
 import { useQuery } from "@tanstack/react-query";
 import { get } from "@/util/http-request";
 import CardMenu from "@/components/menu/card-menu";
-import Link from "next/link";
 import Spinner from "@/components/spinner";
 
 const Menu = () => {
@@ -23,10 +22,10 @@ const Menu = () => {
     <Layout active={Pages.MENU} breadcrumb={[{ title: "Menu" }]}>
       <div className="flex gap-4 justify-between md:justify-start items-center">
         <Button asChild size="sm">
-          <Link href={"/admin/menu/tambah"} className="flex items-center gap-2">
+          <a href={"/admin/menu/tambah"} className="flex items-center gap-2">
             <Plus className="h-5 w-5" />
             Tambah menu
-          </Link>
+          </a>
         </Button>
       </div>
       {isPending && <Spinner />}

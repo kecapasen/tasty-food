@@ -18,29 +18,29 @@ export default function Navbar({ title }: { title: string }) {
         <p className="text-3xl">TASTY FOOD</p>
         <div className="hidden sm:flex sm:items-center sm:gap-2 text-stone-200">
           <Button variant="link" className="text-sm rounded-none">
-            <Link href={"/"} className="text-white">
+            <a href={"/"} className="text-white">
               HOME
-            </Link>
+            </a>
           </Button>
           <Button variant="link" className="text-sm rounded-none">
-            <Link href={"/tentang"} className="text-white">
+            <a href={"/tentang"} className="text-white">
               TENTANG
-            </Link>
+            </a>
           </Button>
           <Button variant="link" className="text-sm rounded-none">
-            <Link href={"/berita"} className="text-white">
+            <a href={"/berita"} className="text-white">
               BERITA
-            </Link>
+            </a>
           </Button>
           <Button variant="link" className="text-sm rounded-none">
-            <Link href={"/galeri"} className="text-white">
+            <a href={"/galeri"} className="text-white">
               GALERI
-            </Link>
+            </a>
           </Button>
           <Button variant="link" className="text-sm rounded-none">
-            <Link href={"/kontak"} className="text-white">
+            <a href={"/kontak"} className="text-white">
               KONTAK
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

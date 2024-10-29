@@ -70,12 +70,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.DASHBOARD ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/dashboard" className="text-sm">
+                  <a href="/admin/dashboard" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <House className="h-5 w-5" />
                       <p>Dashboard</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -83,12 +83,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.MENU ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/menu" className="text-sm">
+                  <a href="/admin/menu" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <Soup className="h-5 w-5" />
                       <p>Menu</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -96,12 +96,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.NEWS ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/berita" className="text-sm">
+                  <a href="/admin/berita" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <Paperclip className="h-5 w-5" />
                       <p>Berita</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -109,12 +109,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.GALLERY ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/galeri" className="text-sm">
+                  <a href="/admin/galeri" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <BookImage className="h-5 w-5" />
                       <p>Galeri</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -122,12 +122,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.EMPLOYEE ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/karyawan" className="text-sm">
+                  <a href="/admin/karyawan" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <UsersRound className="h-5 w-5" />
                       <p>Karyawan</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -135,12 +135,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.CONTACT ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/kontak" className="text-sm">
+                  <a href="/admin/kontak" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <Mail className="h-5 w-5" />
                       <p>Kontak</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -148,12 +148,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.HISTORY ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/riwayat" className="text-sm">
+                  <a href="/admin/riwayat" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <FileText className="h-5 w-5" />
                       <p>Riwayat</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <Button
@@ -161,12 +161,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.REPORT ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/admin/laporan" className="text-sm">
+                  <a href="/admin/laporan" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <ChartLine className="h-5 w-5" />
                       <p>Laporan</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
                 <div className="absolute left-0 bottom-0 p-4">
@@ -180,12 +180,12 @@ const Layout = ({
                   variant="link"
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.ORDER ? "bg-muted px-4" : "bg-white"}`}
                 >
-                  <Link href="/chef/order" className="text-sm">
+                  <a href="/chef/order" className="text-sm">
                     <div className="font-semibold flex gap-2">
                       <FileText className="h-5 w-5" />
                       <p>Order</p>
                     </div>
-                  </Link>
+                  </a>
                 </Button>
                 <Separator />
               </>
@@ -197,12 +197,12 @@ const Layout = ({
                     variant="link"
                     className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.MENU ? "bg-muted px-4" : "bg-white"}`}
                   >
-                    <Link href="/waiter/menu" className="text-sm">
+                    <a href="/waiter/menu" className="text-sm">
                       <div className="font-semibold flex gap-2">
                         <Soup className="h-5 w-5" />
                         <p>Menu</p>
                       </div>
-                    </Link>
+                    </a>
                   </Button>
                   <Separator />
                   <Button
@@ -210,12 +210,12 @@ const Layout = ({
                     variant="link"
                     className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.CART ? "bg-muted px-4" : "bg-white"}`}
                   >
-                    <Link href="/waiter/cart" className="text-sm">
+                    <a href="/waiter/cart" className="text-sm">
                       <div className="font-semibold flex gap-2">
                         <ShoppingCart className="h-5 w-5" />
                         <p>Keranjang</p>
                       </div>
-                    </Link>
+                    </a>
                   </Button>
                   <Separator />
                   <Button
@@ -223,12 +223,12 @@ const Layout = ({
                     variant="link"
                     className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.HISTORY ? "bg-muted px-4" : "bg-white"}`}
                   >
-                    <Link href="/waiter/riwayat" className="text-sm">
+                    <a href="/waiter/riwayat" className="text-sm">
                       <div className="font-semibold flex gap-2">
                         <FileText className="h-5 w-5" />
                         <p>Riwayat</p>
                       </div>
-                    </Link>
+                    </a>
                   </Button>
                   <Separator />
                 </>

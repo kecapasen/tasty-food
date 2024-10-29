@@ -258,18 +258,18 @@ const Cart = () => {
               className="h-auto hidden md:inline-flex items-center gap-2"
               size="sm"
             >
-              <Link href={"/waiter/menu"}>
+              <a href={"/waiter/menu"}>
                 <Soup className="h-5 w-5" />
                 Tambah menu
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
         <Button asChild size="sm" className="flex md:hidden items-center gap-2">
-          <Link href={"/waiter/menu"}>
+          <a href={"/waiter/menu"}>
             <Soup className="h-5 w-5" />
             Tambah menu
-          </Link>
+          </a>
         </Button>
         <div className="rounded-md border">
           <Table>

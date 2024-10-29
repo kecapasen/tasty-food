@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout, { Pages } from "@/components/layout";
 import Spinner from "@/components/spinner";
 import {
@@ -44,6 +44,7 @@ import { Separator } from "@/components/ui/separator";
 import { FileText } from "lucide-react";
 
 const DetailHistory = ({ params }: { params: { slug: string } }) => {
+  const [isMount, setIsMount] = useState<boolean>(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -129,6 +130,10 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
       rowSelection,
     },
   });
+  useEffect(() => {
+    setIsMount(true);
+  }, []);
+  if (!isMount) return null;
   return (
     <Layout
       active={Pages.HISTORY}
@@ -162,7 +167,7 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 relative">
-                  <Avatar className="h-8 w-8">
+                  <Avatar>
                     <AvatarImage
                       src={data!.data.user.avatar || undefined}
                       alt="Dekorator"
