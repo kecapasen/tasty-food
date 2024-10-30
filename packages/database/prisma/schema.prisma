@@ -60,7 +60,7 @@ model Order {
 model OrderDetail {
   id        Int      @id @default(autoincrement())
   order     Order    @relation(fields: [orderId], references: [id], onUpdate: Restrict, onDelete: Restrict)
-  menu      Menu     @relation(fields: [menuId], references: [id], onUpdate: Restrict, onDelete: Restrict)
+  menu      Menu     @relation(fields: [menuId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   orderId   Int
   menuId    Int
   price     Int

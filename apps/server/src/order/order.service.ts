@@ -109,30 +109,46 @@ export class OrderService {
     createOrderDTO: CreateOrderDTO,
   ): Promise<ResponseDTO> {
     const date = new TZDate(new Date(), 'Asia/Jakarta');
-    await this.prismaService.order.create({
-      data: {
-        ...createOrderDTO,
-        createdAt: date,
-        orderDetail: {
-          createMany: {
-            data: createOrderDTO.orderDetail.map((detail) => ({
-              ...detail,
-              createdAt: date,
-            })),
+    const orderTotal = createOrderDTO.orderDetail.reduce(
+      (sum, detail) => sum + detail.price * detail.quantity,
+      0,
+    );
+    return await this.prismaService.$transaction(async (tx) => {
+      const menuIds = createOrderDTO.orderDetail.map((detail) => detail.menuId);
+      const menus = await tx.menu.findMany({
+        where: { id: { in: menuIds } },
+      });
+      if (menus.length !== menuIds.length) {
+        throw new Error('Beberapa menu tidak ditemukan');
+      }
+      await tx.order.create({
+        data: {
+          total: orderTotal,
+          createdAt: date,
+          user: { connect: { userId } },
+          orderDetail: {
+            createMany: {
+              data: createOrderDTO.orderDetail.map((detail) => ({
+                menuId: detail.menuId,
+                price: detail.price,
+                quantity: detail.quantity,
+                total: detail.price * detail.quantity,
+                createdAt: date,
+              })),
+            },
           },
         },
-        user: { connect: { userId } },
-      },
+      });
+      const cart = await tx.cart.findUnique({
+        where: { userId },
+      });
+      if (cart) {
+        await tx.cartDetail.deleteMany({
+          where: { cartId: cart.id },
+        });
+      }
+      return { message: 'Pesanan berhasil dibuat', statusCode: 201 };
     });
-    const cart = await this.prismaService.cart.findUnique({
-      where: {
-        userId,
-      },
-    });
-    await this.prismaService.cartDetail.deleteMany({
-      where: { cartId: cart?.id },
-    });
-    return { message: 'Pesanan berhasil dibuat', statusCode: 201 };
   }
   public async updateOrderStatus(
     orderId: number,
