@@ -1,3 +1,4 @@
+import { TZDate } from '@date-fns/tz';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Contact } from '@repo/db';
 import { CreateContactDTO, GetContactDTO, ResponseDTO } from '@repo/dto';
@@ -17,10 +18,16 @@ export class ContactService {
     });
     if (contacts.length < 1)
       throw new NotFoundException('Kontak tidak ditemukan');
+    const responseData = contacts.map((item) => {
+      return {
+        ...item,
+        createdAt: new TZDate(new Date(item.createdAt), 'Asia/Jakarta'),
+      };
+    });
     return {
       message: 'Daftar kontak berhasil diambil',
       statusCode: 200,
-      data: contacts,
+      data: responseData,
     };
   }
   public async getContactById(contactId: number): Promise<
@@ -37,7 +44,10 @@ export class ContactService {
     return {
       message: 'Kontak berhasil diambil',
       statusCode: 200,
-      data: contact,
+      data: {
+        ...contact,
+        createdAt: new TZDate(new Date(contact.createdAt), 'Asia/Jakarta'),
+      },
     };
   }
   public async createNewContact(
@@ -46,7 +56,7 @@ export class ContactService {
     await this.prismaService.contact.create({
       data: {
         ...createContactDTO,
-        createdAt: new Date(),
+        createdAt: new TZDate(new Date(), 'Asia/Jakarta'),
       },
     });
     return { message: 'Kontak berhasil dibuat', statusCode: 201 };

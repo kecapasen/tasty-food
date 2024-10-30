@@ -17,27 +17,27 @@ export default function Navbar({ title }: { title: string }) {
       <div className="absolute flex justify-between p-16 w-full z-10">
         <p className="text-3xl">TASTY FOOD</p>
         <div className="hidden sm:flex sm:items-center sm:gap-2 text-stone-200">
-          <Button variant="link" className="text-sm rounded-none">
+          <Button asChild variant="link" className="text-sm rounded-none">
             <a href={"/"} className="text-white">
               HOME
             </a>
           </Button>
-          <Button variant="link" className="text-sm rounded-none">
+          <Button asChild variant="link" className="text-sm rounded-none">
             <a href={"/tentang"} className="text-white">
               TENTANG
             </a>
           </Button>
-          <Button variant="link" className="text-sm rounded-none">
+          <Button asChild variant="link" className="text-sm rounded-none">
             <a href={"/berita"} className="text-white">
               BERITA
             </a>
           </Button>
-          <Button variant="link" className="text-sm rounded-none">
+          <Button asChild variant="link" className="text-sm rounded-none">
             <a href={"/galeri"} className="text-white">
               GALERI
             </a>
           </Button>
-          <Button variant="link" className="text-sm rounded-none">
+          <Button asChild variant="link" className="text-sm rounded-none">
             <a href={"/kontak"} className="text-white">
               KONTAK
             </a>

@@ -52,8 +52,10 @@ export class NewsService {
           fullname: news.user.fullname,
           avatar: news.user.avatar,
         },
-        createdAt: news.createdAt,
-        updatedAt: news.updatedAt,
+        createdAt: new TZDate(new Date(news.createdAt), 'Asia/Jakarta'),
+        updatedAt: news.updatedAt
+          ? new TZDate(new Date(news.updatedAt), 'Asia/Jakarta')
+          : news.updatedAt,
       };
     });
     if (newsList.length < 1)
@@ -88,8 +90,10 @@ export class NewsService {
         fullname: newsItem.user.fullname,
         avatar: newsItem.user.avatar,
       },
-      createdAt: newsItem.createdAt,
-      updatedAt: newsItem.updatedAt,
+      createdAt: new TZDate(new Date(newsItem.createdAt), 'Asia/Jakarta'),
+      updatedAt: newsItem.updatedAt
+        ? new TZDate(new Date(newsItem.updatedAt), 'Asia/Jakarta')
+        : newsItem.updatedAt,
     };
     return {
       message: 'Berita berhasil diambil',
@@ -133,7 +137,7 @@ export class NewsService {
       user: { connect: { userId } },
       title: updateNewsDTO.title,
       article: updateNewsDTO.article,
-      updatedAt: new Date(),
+      updatedAt: new TZDate(new Date(), 'Asia/Jakarta'),
     };
     if (file) {
       const imageUrl = await this.supabaseService.uploadFile(
@@ -147,10 +151,7 @@ export class NewsService {
     }
     await this.prismaService.news.update({
       where: { id: newsId },
-      data: {
-        ...updateData,
-        updatedAt: new TZDate(new Date(), 'Asia/Jakarta'),
-      },
+      data: updateData,
     });
     return {
       message: 'Berita berhasil diperbarui',
@@ -169,7 +170,7 @@ export class NewsService {
           equals: null,
         },
       },
-      data: { deletedAt: new Date() },
+      data: { deletedAt: new TZDate(new Date(), 'Asia/Jakarta') },
     });
     return {
       message: 'Berita berhasil dihapus',

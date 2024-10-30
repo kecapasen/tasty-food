@@ -12,6 +12,7 @@ import {
   UpdateUserDTO,
 } from '@repo/dto';
 import { Prisma, Role, User } from '@repo/db';
+import { TZDate } from '@date-fns/tz';
 
 @Injectable()
 export class UserService {
@@ -86,6 +87,7 @@ export class UserService {
       fullname: createUserDTO.fullname,
       role: createUserDTO.role,
       password: createUserDTO.password,
+      createdAt: new TZDate(new Date(), 'Asia/Jakarta'),
     };
     if (file) {
       const avatarUrl = await this.supabaseService.uploadFile(
@@ -118,7 +120,7 @@ export class UserService {
       fullname: updateUserDTO.fullname,
       role: updateUserDTO.role,
       password: updateUserDTO.password,
-      updatedAt: new Date(),
+      updatedAt: new TZDate(new Date(), 'Asia/Jakarta'),
     };
     if (file) {
       const avatarUrl = await this.supabaseService.uploadFile(

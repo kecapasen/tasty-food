@@ -102,7 +102,10 @@ export class ReportService {
               hour,
           )?._sum?.total || 0;
         return {
-          hour: format(startOfHour(new Date()).setHours(hour), 'HH:mm'),
+          hour: format(
+            startOfHour(new TZDate(new Date(), 'Asia/Jakarta')).setHours(hour),
+            'HH:mm',
+          ),
           today: todayTotal,
           yesterday: yesterdayTotal,
         };
@@ -192,6 +195,7 @@ export class ReportService {
       revenueChartData,
       topSellingItemsChartData,
     };
+    console.log(responseData);
     return {
       message: 'Report data berhasil diambil',
       statusCode: 200,

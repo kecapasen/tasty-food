@@ -37,7 +37,7 @@ export class OrderService {
         id: order.id,
         total: order.total,
         status: order.status,
-        createdAt: order.createdAt,
+        createdAt: new TZDate(new Date(order.createdAt), 'Asia/Jakarta'),
         user: {
           fullname: order.user.fullname,
           avatar: order.user.avatar,
@@ -80,7 +80,7 @@ export class OrderService {
       id: order.id,
       total: order.total,
       status: order.status,
-      createdAt: order.createdAt,
+      createdAt: new TZDate(new Date(order.createdAt), 'Asia/Jakarta'),
       user: {
         fullname: order.user.fullname,
         avatar: order.user.avatar,

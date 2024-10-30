@@ -12,6 +12,7 @@ import {
   UpdateMenuDTO,
 } from '@repo/dto';
 import { Menu, Prisma } from '@repo/db';
+import { TZDate } from '@date-fns/tz';
 
 @Injectable()
 export class MenuService {
@@ -44,8 +45,10 @@ export class MenuService {
         price: menu.price,
         category: menu.category,
         image: menu.image,
-        createdAt: menu.createdAt,
-        updatedAt: menu.updatedAt,
+        createdAt: new TZDate(new Date(menu.createdAt), 'Asia/Jakarta'),
+        updatedAt: menu.updatedAt
+          ? new TZDate(new Date(menu.updatedAt), 'Asia/Jakarta')
+          : menu.updatedAt,
       };
     });
     if (menus.length < 1) throw new NotFoundException('Menu tidak ditemukan');
@@ -81,8 +84,10 @@ export class MenuService {
         fullname: menu.user.fullname,
         avatar: menu.user.avatar,
       },
-      createdAt: menu.createdAt,
-      updatedAt: menu.updatedAt,
+      createdAt: new TZDate(new Date(menu.createdAt), 'Asia/Jakarta'),
+      updatedAt: menu.updatedAt
+        ? new TZDate(new Date(menu.updatedAt), 'Asia/Jakarta')
+        : menu.updatedAt,
     };
     return {
       message: 'Menu berhasil diambil',
@@ -112,6 +117,7 @@ export class MenuService {
       data: {
         ...createMenuDTO,
         image: imageUrl.url,
+        createdAt: new TZDate(new Date(), 'Asia/Jakarta'),
         user: { connect: { userId } },
       },
     });
@@ -132,7 +138,7 @@ export class MenuService {
       description: updateMenuDTO.description,
       price: updateMenuDTO.price,
       category: updateMenuDTO.category,
-      updatedAt: new Date(),
+      updatedAt: new TZDate(new Date(), 'Asia/Jakarta'),
       user: { connect: { userId } },
     };
     if (file) {

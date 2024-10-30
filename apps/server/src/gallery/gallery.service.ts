@@ -1,9 +1,10 @@
+import { TZDate } from '@date-fns/tz';
 import {
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Gallery, Type, User } from '@repo/db';
+import { Gallery, Prisma, Type, User } from '@repo/db';
 import { CreateGalleryDTO, GetGalleryDTO, ResponseDTO } from '@repo/dto';
 import { Bucket } from 'src/interfaces';
 import { PrismaService, SupabaseService } from 'src/lib';
@@ -40,8 +41,10 @@ export class GalleryService {
           fullname: gallery.user.fullname,
           avatar: gallery.user.avatar,
         },
-        createdAt: gallery.createdAt,
-        updatedAt: gallery.updatedAt,
+        createdAt: new TZDate(new Date(gallery.createdAt), 'Asia/Jakarta'),
+        updatedAt: gallery.updatedAt
+          ? new TZDate(new Date(gallery.updatedAt), 'Asia/Jakarta')
+          : gallery.updatedAt,
       };
     });
     if (galleries.length < 1)
@@ -64,10 +67,18 @@ export class GalleryService {
     );
     if (!Array.isArray(uploadedUrls))
       throw new ConflictException('Unggahan gagal');
+    const createdAt = new TZDate(new Date(), 'Asia/Jakarta');
     await this.prismaService.gallery.createMany({
-      data: uploadedUrls.map((file: { url: string }) => {
-        return { userId, image: file.url, type: createGalleryDTO.type };
-      }),
+      data: uploadedUrls.map(
+        (file: { url: string }): Prisma.GalleryCreateManyInput => {
+          return {
+            userId,
+            image: file.url,
+            type: createGalleryDTO.type,
+            createdAt,
+          };
+        },
+      ),
     });
     return {
       message: 'Galeri berhasil dibuat',
@@ -94,7 +105,7 @@ export class GalleryService {
       where: { id: galleryId },
       data: {
         image: uploadedUrl.url,
-        updatedAt: new Date(),
+        updatedAt: new TZDate(new Date(), 'Asia/Jakarta'),
         user: { connect: { userId } },
       },
     });
@@ -116,7 +127,7 @@ export class GalleryService {
     if (!gallery) throw new NotFoundException('Galeri tidak ditemukan');
     await this.prismaService.gallery.update({
       where: { id: galleryId },
-      data: { deletedAt: new Date() },
+      data: { deletedAt: new TZDate(new Date(), 'Asia/Jakarta') },
     });
     return {
       message: 'Galeri berhasil dihapus',
