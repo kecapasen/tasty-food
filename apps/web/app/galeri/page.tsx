@@ -48,7 +48,7 @@ export default function Galeri() {
                       <CarouselItem key={index}>
                         <div className="flex aspect-video items-center justify-center p-0 relative max-h-[512px] w-full group rounded-xl overflow-hidden">
                           <Image
-                            src={"/ella-olsson-mmnKI8kMxpc-unsplash.jpg"}
+                            src={item.image}
                             alt="Dekorasi"
                             className="object-cover group-hover:brightness-75 group-hover:scale-110 transition-all duration-300 ease-in-out"
                             fill
