@@ -160,32 +160,37 @@ const Home = () => {
                 </Sheet>
                 <div className="hidden sm:flex sm:items-center sm:gap-2">
                   <Button
+                    asChild
                     variant="link"
-                    className="font-bold text-sm rounded-none"
+                    className="text-sm rounded-none"
                   >
                     <a href={"/"}>HOME</a>
                   </Button>
                   <Button
+                    asChild
                     variant="link"
-                    className="font-bold text-sm rounded-none"
+                    className="text-sm rounded-none"
                   >
                     <a href={"/tentang"}>TENTANG</a>
                   </Button>
                   <Button
+                    asChild
                     variant="link"
-                    className="font-bold text-sm rounded-none"
+                    className="text-sm rounded-none"
                   >
                     <a href={"/berita"}>BERITA</a>
                   </Button>
                   <Button
+                    asChild
                     variant="link"
-                    className="font-bold text-sm rounded-none"
+                    className="text-sm rounded-none"
                   >
                     <a href={"/galeri"}>GALERI</a>
                   </Button>
                   <Button
+                    asChild
                     variant="link"
-                    className="font-bold text-sm rounded-none"
+                    className="text-sm rounded-none"
                   >
                     <a href={"/kontak"}>KONTAK</a>
                   </Button>

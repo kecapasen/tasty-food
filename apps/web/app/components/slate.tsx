@@ -49,29 +49,6 @@ const SlateNews = ({
   children: ReactNode;
 }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-  const renderElement = useCallback((props: RenderElementProps) => {
-    switch (props.element.type) {
-      case "heading-one":
-        return <HeadingElement {...props} />;
-      case "heading-two":
-        return <SubHeadingElement {...props} />;
-      case "bulleted-list":
-        return <BulletedListElement {...props} />;
-      case "numbered-list":
-        return <OrderedListElement {...props} />;
-      case "list-item":
-        return <ListElement {...props} />;
-      case "blockquote":
-        return <BlockQuoteElement {...props} />;
-      case "paragraph":
-        return <DefaultElement {...props} />;
-      default:
-        return <DefaultElement {...props} />;
-    }
-  }, []);
-  const renderLeaf = useCallback((props: RenderLeafProps) => {
-    return <Leaf {...props} />;
-  }, []);
   return (
     <Slate editor={editor} initialValue={JSON.parse(item.article!.toString())}>
       {children}

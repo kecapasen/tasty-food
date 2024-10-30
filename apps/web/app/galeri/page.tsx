@@ -6,8 +6,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
@@ -39,7 +37,7 @@ export default function Galeri() {
         <>
           <Navbar title="GALERI KAMI" />
           <div className="p-16 bg-secondary">
-            <Carousel>
+            <Carousel className="overflow-hidden">
               <CarouselContent className="p-0">
                 {data.data
                   .filter((gallery) => gallery.type === Type.SLIDER)
@@ -93,8 +91,6 @@ export default function Galeri() {
                     );
                   })}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
             </Carousel>
           </div>
           <div className="p-16 grid grid-cols-4 gap-2">

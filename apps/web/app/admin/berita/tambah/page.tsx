@@ -468,7 +468,7 @@ const BlockQuoteElement = (props: RenderElementProps) => {
   return (
     <blockquote
       {...props.attributes}
-      className="bg-muted p-4 border-s-4 border-primary rounded-md"
+      className="bg-muted p-4 border-s-4 border-primary"
     >
       {props.children}
     </blockquote>
