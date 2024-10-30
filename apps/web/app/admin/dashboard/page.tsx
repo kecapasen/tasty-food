@@ -30,7 +30,6 @@ const Admin = () => {
   const [isPending, setIsPending] = useState<boolean>(true);
   useEffect(() => {
     const onUpdateDashboard = ({ data }: { data: GetDashboardDTO }) => {
-      console.log(data);
       setDashboardData({ ...data });
       setIsPending(false);
     };

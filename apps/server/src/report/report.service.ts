@@ -1,3 +1,4 @@
+import { TZDate } from '@date-fns/tz';
 import { Injectable } from '@nestjs/common';
 import {
   DateRangeDTO,
@@ -89,11 +90,17 @@ export class ReportService {
       const salesByHour = Array.from({ length: 21 - 8 + 1 }, (_, i) => {
         const hour = 8 + i;
         const todayTotal =
-          salesByHourToday.find((item) => getHours(item.createdAt) === hour)
-            ?._sum?.total || 0;
+          salesByHourToday.find(
+            (item) =>
+              getHours(new TZDate(new Date(item.createdAt), 'Asia/Jakarta')) ===
+              hour,
+          )?._sum?.total || 0;
         const yesterdayTotal =
-          salesByHourYesterday.find((item) => getHours(item.createdAt) === hour)
-            ?._sum?.total || 0;
+          salesByHourYesterday.find(
+            (item) =>
+              getHours(new TZDate(new Date(item.createdAt), 'Asia/Jakarta')) ===
+              hour,
+          )?._sum?.total || 0;
         return {
           hour: format(startOfHour(new Date()).setHours(hour), 'HH:mm'),
           today: todayTotal,
@@ -113,7 +120,7 @@ export class ReportService {
             id: item.id,
             totalAmount: item.total,
             orderStatus: item.status,
-            createdAt: item.createdAt,
+            createdAt: new TZDate(new Date(item.createdAt), 'Asia/Jakarta'),
           };
         }),
       };
@@ -145,7 +152,10 @@ export class ReportService {
       },
     });
     const revenueChartData = revenueData.map((order) => ({
-      date: format(order.createdAt, 'yyyy-MM-dd'),
+      date: format(
+        new TZDate(new Date(order.createdAt), 'Asia/Jakarta'),
+        'yyyy-MM-dd',
+      ),
       revenueAmount: order._sum?.total || 0,
     }));
     const topSellingItems = await this.prismaService.orderDetail.groupBy({
@@ -167,7 +177,7 @@ export class ReportService {
       take: 4,
     });
     const topSellingItemsChartData = await Promise.all(
-      topSellingItems.map(async (item, index) => {
+      topSellingItems.map(async (item) => {
         const menu = await this.prismaService.menu.findUnique({
           where: { id: item.menuId },
         });

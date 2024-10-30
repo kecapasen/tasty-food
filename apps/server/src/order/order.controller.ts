@@ -45,7 +45,6 @@ export class OrderController {
     @User('userId', ParseIntPipe) userId: number,
     @Body() createOrderDTO: CreateOrderDTO,
   ): Promise<ResponseDTO> {
-    console.log(createOrderDTO);
     return await this.orderService.createOrder(userId, createOrderDTO);
   }
   @UseGuards(JwtAuthGuard)
