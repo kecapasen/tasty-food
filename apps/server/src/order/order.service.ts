@@ -114,13 +114,6 @@ export class OrderService {
       0,
     );
     return await this.prismaService.$transaction(async (tx) => {
-      const menuIds = createOrderDTO.orderDetail.map((detail) => detail.menuId);
-      const menus = await tx.menu.findMany({
-        where: { id: { in: menuIds } },
-      });
-      if (menus.length !== menuIds.length) {
-        throw new Error('Beberapa menu tidak ditemukan');
-      }
       await tx.order.create({
         data: {
           total: orderTotal,

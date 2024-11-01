@@ -185,7 +185,7 @@ const Laporan = () => {
                   variant="outline"
                   size="sm"
                 >
-                  <Download className="h-5 w-5" />
+                  <Download className="h-4 w-4" />
                   Unduh Laporan
                 </Button>
               </CardFooter>
@@ -277,7 +277,7 @@ const Laporan = () => {
                     variant="outline"
                     size="sm"
                   >
-                    <Download className="h-5 w-5" />
+                    <Download className="h-4 w-4" />
                     Unduh Laporan
                   </Button>
                 </CardFooter>

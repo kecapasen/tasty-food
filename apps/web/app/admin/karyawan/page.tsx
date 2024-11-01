@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout, { Pages } from "@/components/layout";
 import {
   CaretSortIcon,
@@ -46,6 +46,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 const Employee = () => {
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -204,6 +205,10 @@ const Employee = () => {
       rowSelection,
     },
   });
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) return null;
   return (
     <Layout breadcrumb={[{ title: "Karyawan" }]} active={Pages.EMPLOYEE}>
       <div className="w-full flex flex-col gap-4">
@@ -251,7 +256,7 @@ const Employee = () => {
               size="sm"
             >
               <a href={"/admin/karyawan/tambah"}>
-                <UserRoundPlus className="h-5 w-5" />
+                <UserRoundPlus className="h-4 w-4" />
                 Tambah karyawan
               </a>
             </Button>
@@ -259,7 +264,7 @@ const Employee = () => {
         </div>
         <Button asChild size="sm" className="flex md:hidden items-center gap-2">
           <a href={"/admin/karyawan/tambah"}>
-            <UserRoundPlus className="h-5 w-5" />
+            <UserRoundPlus className="h-4 w-4" />
             Tambah karyawan
           </a>
         </Button>

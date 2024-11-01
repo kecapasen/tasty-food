@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout, { Pages } from "@/components/layout";
 import {
   CaretSortIcon,
@@ -46,6 +46,7 @@ import { id } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 
 const News = () => {
+  const [isMounted, setIsMounted] = useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -183,6 +184,10 @@ const News = () => {
       rowSelection,
     },
   });
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) return null;
   return (
     <Layout breadcrumb={[{ title: "Berita" }]} active={Pages.NEWS}>
       <div className="w-full flex flex-col gap-4">
@@ -228,7 +233,7 @@ const News = () => {
               size="sm"
             >
               <a href={"/admin/berita/tambah"}>
-                <Feather className="h-5 w-5" />
+                <Feather className="h-4 w-4" />
                 Buat berita
               </a>
             </Button>
@@ -236,7 +241,7 @@ const News = () => {
         </div>
         <Button asChild size="sm" className="flex md:hidden items-center gap-2">
           <a href={"/admin/berita/tambah"}>
-            <Feather className="h-5 w-5" />
+            <Feather className="h-4 w-4" />
             Buat berita
           </a>
         </Button>

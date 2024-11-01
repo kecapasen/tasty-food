@@ -213,7 +213,7 @@ const Gallery = () => {
                   variant="outline"
                   size="sm"
                 >
-                  <ImagePlus className="h-5 w-5" />
+                  <ImagePlus className="h-4 w-4" />
                   Tambah foto
                 </Button>
               </DialogTrigger>

@@ -112,7 +112,6 @@ const Home = () => {
           setRemainingArticles([]);
         }
       } catch (error) {
-        console.error("Error processing news data:", error);
         setFeaturedArticle(null);
         setRemainingArticles([]);
       }
@@ -140,7 +139,7 @@ const Home = () => {
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button variant="ghost" className="inline sm:hidden p-0">
-                      <Menu className="h-5 w-5" />
+                      <Menu className="h-4 w-4" />
                     </Button>
                   </SheetTrigger>
                   <SheetContent side="left">

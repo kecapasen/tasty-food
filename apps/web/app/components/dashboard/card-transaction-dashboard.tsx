@@ -19,7 +19,7 @@ const CardTransactionDashboard = ({
       <div className="flex gap-2 py-4 px-6 hover:bg-muted cursor-pointer">
         <div>
           <Card className="bg-accent p-2 inline-block">
-            <FileText className="h-5 w-5 text-white" />
+            <FileText className="h-4 w-4 text-white" />
           </Card>
         </div>
         <div className="flex flex-col gap-1">

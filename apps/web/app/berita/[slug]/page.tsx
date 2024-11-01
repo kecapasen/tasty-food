@@ -185,7 +185,7 @@ const DetailNews = ({ params }: { params: { slug: string } }) => {
               <p className="text-4xl font-bold">{data.data.title}</p>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 relative">
-                  <Avatar className="h-8 w-8">
+                  <Avatar>
                     <AvatarImage
                       src={data.data.user.avatar || undefined}
                       alt="Dekorator"

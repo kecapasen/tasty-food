@@ -79,7 +79,6 @@ export default function Berita() {
           setRemainingArticles([]);
         }
       } catch (error) {
-        console.error("Error processing news data:", error);
         setFeaturedArticle(null);
         setRemainingArticles([]);
       }
@@ -164,7 +163,7 @@ export default function Berita() {
                           >
                             Baca selengkapnya
                           </a>
-                          <Ellipsis className="h-5 w-5" />
+                          <Ellipsis className="h-4 w-4" />
                         </div>
                       </div>
                     </CardContent>

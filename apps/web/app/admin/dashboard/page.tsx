@@ -47,22 +47,22 @@ const Admin = () => {
         <>
           <Card className="grid md:grid-cols-2 lg:grid-cols-4 p-4 gap-4">
             <StatDashboard
-              icon={<FileText className="h-5 w-5 text-accent" />}
+              icon={<FileText className="h-4 w-4 text-accent" />}
               title="Pesanan"
               value={dashboardData?.totalOrders || 0}
             />
             <StatDashboard
-              icon={<DollarSign className="h-5 w-5 text-accent" />}
+              icon={<DollarSign className="h-4 w-4 text-accent" />}
               title="Pendapatan"
               value={toIDR(dashboardData?.totalRevenue || 0)}
             />
             <StatDashboard
-              icon={<ClockAlert className="h-5 w-5 text-accent" />}
+              icon={<ClockAlert className="h-4 w-4 text-accent" />}
               title="Tertunda"
               value={dashboardData?.totalPendingOrders || 0}
             />
             <StatDashboard
-              icon={<TrendingUp className="h-5 w-5 text-accent" />}
+              icon={<TrendingUp className="h-4 w-4 text-accent" />}
               title="Terlaris"
               value={dashboardData?.topSellingItem || ""}
             />

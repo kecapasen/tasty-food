@@ -259,7 +259,7 @@ const Cart = () => {
               size="sm"
             >
               <a href={"/waiter/menu"}>
-                <Soup className="h-5 w-5" />
+                <Soup className="h-4 w-4" />
                 Tambah menu
               </a>
             </Button>
@@ -267,7 +267,7 @@ const Cart = () => {
         </div>
         <Button asChild size="sm" className="flex md:hidden items-center gap-2">
           <a href={"/waiter/menu"}>
-            <Soup className="h-5 w-5" />
+            <Soup className="h-4 w-4" />
             Tambah menu
           </a>
         </Button>
@@ -330,28 +330,30 @@ const Cart = () => {
             </TableBody>
           </Table>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-          onClick={() =>
-            mutation.mutate({
-              orderDetail: data!.data.cartDetail.map((item) => ({
-                menuId: item.id,
-                price: item.price,
-                quantity: item.quantity,
-                total: item.total,
-              })),
-              total: data!.data.cartDetail.reduce(
-                (acc, curr) => Number(acc + curr.total),
-                0
-              ),
-            })
-          }
-          disabled={mutation.isPending}
-        >
-          <FileText className="h-4 w-4" /> Buat pesanan
-        </Button>
+        {data?.data && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() =>
+              mutation.mutate({
+                orderDetail: data.data.cartDetail.map((item) => ({
+                  menuId: item.menu.id,
+                  price: item.price,
+                  quantity: item.quantity,
+                  total: item.total,
+                })),
+                total: data.data.cartDetail.reduce(
+                  (acc, curr) => Number(acc + curr.total),
+                  0
+                ),
+              })
+            }
+            disabled={mutation.isPending}
+          >
+            <FileText className="h-4 w-4" /> Buat pesanan
+          </Button>
+        )}
       </div>
     </Layout>
   );

@@ -23,7 +23,7 @@ const Menu = () => {
       <div className="flex gap-4 justify-between md:justify-start items-center">
         <Button asChild size="sm">
           <a href={"/admin/menu/tambah"} className="flex items-center gap-2">
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4" />
             Tambah menu
           </a>
         </Button>

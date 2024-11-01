@@ -71,8 +71,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.DASHBOARD ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/dashboard" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <House className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <House className="h-4 w-4" />
                       <p>Dashboard</p>
                     </div>
                   </a>
@@ -84,8 +84,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.MENU ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/menu" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <Soup className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <Soup className="h-4 w-4" />
                       <p>Menu</p>
                     </div>
                   </a>
@@ -97,8 +97,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.NEWS ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/berita" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <Paperclip className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <Paperclip className="h-4 w-4" />
                       <p>Berita</p>
                     </div>
                   </a>
@@ -110,8 +110,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.GALLERY ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/galeri" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <BookImage className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <BookImage className="h-4 w-4" />
                       <p>Galeri</p>
                     </div>
                   </a>
@@ -123,8 +123,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.EMPLOYEE ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/karyawan" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <UsersRound className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <UsersRound className="h-4 w-4" />
                       <p>Karyawan</p>
                     </div>
                   </a>
@@ -136,8 +136,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.CONTACT ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/kontak" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <Mail className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
                       <p>Kontak</p>
                     </div>
                   </a>
@@ -149,8 +149,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.HISTORY ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/riwayat" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <FileText className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
                       <p>Riwayat</p>
                     </div>
                   </a>
@@ -162,15 +162,15 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.REPORT ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/admin/laporan" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <ChartLine className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <ChartLine className="h-4 w-4" />
                       <p>Laporan</p>
                     </div>
                   </a>
                 </Button>
                 <Separator />
                 <div className="absolute left-0 bottom-0 p-4">
-                  <Settings className="h-5 w-5" />
+                  <Settings className="h-4 w-4" />
                 </div>
               </>
             ) : data.data.role === "CHEF" ? (
@@ -181,8 +181,8 @@ const Layout = ({
                   className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.ORDER ? "bg-muted px-4" : "bg-white"}`}
                 >
                   <a href="/chef/order" className="text-sm">
-                    <div className="font-semibold flex gap-2">
-                      <FileText className="h-5 w-5" />
+                    <div className="font-semibold flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
                       <p>Order</p>
                     </div>
                   </a>
@@ -198,8 +198,8 @@ const Layout = ({
                     className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.MENU ? "bg-muted px-4" : "bg-white"}`}
                   >
                     <a href="/waiter/menu" className="text-sm">
-                      <div className="font-semibold flex gap-2">
-                        <Soup className="h-5 w-5" />
+                      <div className="font-semibold flex items-center gap-2">
+                        <Soup className="h-4 w-4" />
                         <p>Menu</p>
                       </div>
                     </a>
@@ -211,8 +211,8 @@ const Layout = ({
                     className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.CART ? "bg-muted px-4" : "bg-white"}`}
                   >
                     <a href="/waiter/cart" className="text-sm">
-                      <div className="font-semibold flex gap-2">
-                        <ShoppingCart className="h-5 w-5" />
+                      <div className="font-semibold flex items-center gap-2">
+                        <ShoppingCart className="h-4 w-4" />
                         <p>Keranjang</p>
                       </div>
                     </a>
@@ -224,8 +224,8 @@ const Layout = ({
                     className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.HISTORY ? "bg-muted px-4" : "bg-white"}`}
                   >
                     <a href="/waiter/riwayat" className="text-sm">
-                      <div className="font-semibold flex gap-2">
-                        <FileText className="h-5 w-5" />
+                      <div className="font-semibold flex items-center gap-2">
+                        <FileText className="h-4 w-4" />
                         <p>Riwayat</p>
                       </div>
                     </a>

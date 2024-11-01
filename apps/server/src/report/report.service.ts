@@ -195,7 +195,6 @@ export class ReportService {
       revenueChartData,
       topSellingItemsChartData,
     };
-    console.log(responseData);
     return {
       message: 'Report data berhasil diambil',
       statusCode: 200,
