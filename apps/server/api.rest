@@ -1,4 +1,4 @@
-POST http://localhost:2000/v1/order HTTP/1.1
+POST http://178.128.62.254:2000/v1/order HTTP/1.1
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:2000/v1/auth/signin HTTP/1.1
+POST http://178.128.62.254:2000/v1/auth/signin HTTP/1.1
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:2000/v1/user HTTP/1.1
+POST http://178.128.62.254:2000/v1/user HTTP/1.1
 Content-Type: application/json
 
 {
@@ -33,4 +33,4 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:2000/v1/order HTTP/1.1
+GET http://178.128.62.254:2000/v1/order HTTP/1.1

@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 
 @WebSocketGateway(8080, {
   cors: {
-    origin: ['http://localhost:3000'],
+    origin: ['http://178.128.62.254:3000'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
