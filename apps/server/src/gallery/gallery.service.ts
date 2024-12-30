@@ -47,8 +47,6 @@ export class GalleryService {
           : gallery.updatedAt,
       };
     });
-    if (galleries.length < 1)
-      throw new NotFoundException('Galeri tidak ditemukan');
     return {
       message: 'Galeri berhasil diambil',
       statusCode: 200,

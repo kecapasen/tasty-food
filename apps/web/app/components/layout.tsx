@@ -15,13 +15,24 @@ import {
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 import { Button } from "./ui/button";
 import BreadcrumbListItem, { BreadcrumbType } from "./breadcrumb-list";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { get } from "@/util/http-request";
 import { GetUserDTO } from "@repo/dto";
 import Spinner from "./spinner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { logout } from "@/auth/logout";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { ToastAction } from "./ui/toast";
 
 export enum Pages {
   DASHBOARD = "Dashboard",
@@ -31,7 +42,6 @@ export enum Pages {
   EMPLOYEE = "Karyawan",
   CONTACT = "Kontak",
   HISTORY = "Riwayat",
-  REPORT = "Laporan",
   ORDER = "Order",
   CART = "Cart",
 }
@@ -42,15 +52,47 @@ const Layout = ({
   breadcrumb,
 }: {
   children: ReactNode;
-  active: Pages;
+  active?: Pages;
   breadcrumb: BreadcrumbType[];
 }) => {
+  const { toast } = useToast();
+  const { push } = useRouter();
   const { data, isPending, isSuccess } = useQuery<{
     data: GetUserDTO;
   }>({
     queryKey: ["getme"],
     queryFn: async () => {
       return await get("/auth/getme");
+    },
+  });
+  const mutation = useMutation({
+    mutationFn: async () => {
+      return await logout();
+    },
+    onMutate: () => {
+      toast({
+        title: "Mohon tunggu...",
+        description: "Mohon tunggu, proses sedang berlangsung.",
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Sukses!",
+        description: "Mengalihkan...",
+      });
+      push("/auth/signin");
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: error.message || "Terjadi kesalahan, silakan coba lagi.",
+        action: (
+          <ToastAction altText="Coba lagi" onClick={() => mutation.mutate()}>
+            Coba lagi
+          </ToastAction>
+        ),
+      });
     },
   });
   return (
@@ -60,7 +102,7 @@ const Layout = ({
         <>
           <div className="w-64 lg:flex flex-col gap-2 p-4 border-r relative hidden">
             <p className="text-xl font-bold text-center pb-2">
-              Tasty <span className="text-amber-500 underline">Food.</span>
+              Tasty <span className="text-accent underline">Food.</span>
             </p>
             <Separator />
             {data.data.role === "ADMIN" ? (
@@ -156,19 +198,6 @@ const Layout = ({
                   </a>
                 </Button>
                 <Separator />
-                <Button
-                  asChild
-                  variant="link"
-                  className={`h-auto p-2 hover:px-4 transition-all duration-200 ease-in-out rounded hover:bg-muted justify-start hover:no-underline ${active === Pages.REPORT ? "bg-muted px-4" : "bg-white"}`}
-                >
-                  <a href="/admin/laporan" className="text-sm">
-                    <div className="font-semibold flex items-center gap-2">
-                      <ChartLine className="h-4 w-4" />
-                      <p>Laporan</p>
-                    </div>
-                  </a>
-                </Button>
-                <Separator />
                 <div className="absolute left-0 bottom-0 p-4">
                   <Settings className="h-4 w-4" />
                 </div>
@@ -238,18 +267,37 @@ const Layout = ({
           <div className="w-full flex flex-col gap-4 p-4 max-h-dvh overflow-auto">
             <div className="flex justify-between items-center h-[28px] w-full">
               <p className="text-xl font-bold">{`Hai ${data.data.fullname}!`}</p>
-              <Avatar>
-                <AvatarImage
-                  src={data.data.avatar || undefined}
-                  alt="Dekorator"
-                />
-                <AvatarFallback className="font-semibold">
-                  {data.data.fullname
-                    .split(" ")
-                    .map((data: string) => data[0]?.toUpperCase())
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage
+                      src={data.data.avatar || undefined}
+                      alt="Dekorator"
+                    />
+                    <AvatarFallback className="font-semibold">
+                      {data.data.fullname
+                        .split(" ")
+                        .map((data: string) => data[0]?.toUpperCase())
+                        .join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48">
+                  <DropdownMenuLabel>Akun saya</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Lihat profil</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive-foreground focus:bg-destructive"
+                    disabled={mutation.isPending}
+                    onClick={() => {
+                      mutation.mutate();
+                    }}
+                  >
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <Separator />
             <Breadcrumb className="text-stone-800">

@@ -42,7 +42,7 @@ import { id } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Status } from "@repo/db";
 import { toIDR } from "@/util";
-import { socket } from "@/socket";
+import { socket } from "@/lib";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const History = () => {

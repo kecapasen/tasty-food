@@ -25,8 +25,7 @@ import {
   RenderElementProps,
   RenderLeafProps,
 } from "slate-react";
-export default function Berita() {
-  const [isMount, setIsMount] = useState<boolean>(false);
+const Berita = () => {
   const [featuredArticle, setFeaturedArticle] = useState<GetNewsDTO | null>(
     null
   );
@@ -61,11 +60,7 @@ export default function Berita() {
     queryFn: async () => {
       return await get("/news");
     },
-    enabled: isMount,
   });
-  useEffect(() => {
-    setIsMount(true);
-  }, []);
   useEffect(() => {
     if (data?.data) {
       try {
@@ -84,7 +79,6 @@ export default function Berita() {
       }
     }
   }, [data]);
-  if (!isMount) return null;
   return (
     <div className="overflow-x-hidden">
       {isPending && (
@@ -111,7 +105,7 @@ export default function Berita() {
             </Card>
             <div className="flex flex-col justify-center gap-8">
               <p className="text-3xl font-bold">{featuredArticle.title}</p>
-              <SlateNews item={featuredArticle}>
+              <SlateNews content={featuredArticle.article}>
                 <Editable
                   readOnly
                   className="font-poppins text-sm antialiased text-primary line-clamp-[16]"
@@ -147,7 +141,7 @@ export default function Berita() {
                       <div className="flex flex-col gap-8 p-4">
                         <div className="flex flex-col gap-4">
                           <p className="text-3xl font-bold">{item.title}</p>
-                          <SlateNews item={item}>
+                          <SlateNews content={item.article}>
                             <Editable
                               readOnly
                               className="font-poppins text-sm antialiased text-primary line-clamp-4"
@@ -159,7 +153,7 @@ export default function Berita() {
                         <div className="flex justify-between items-center">
                           <a
                             href={`/berita/${item.id}`}
-                            className="text-sm text-amber-500"
+                            className="text-sm text-accent"
                           >
                             Baca selengkapnya
                           </a>
@@ -176,4 +170,6 @@ export default function Berita() {
       )}
     </div>
   );
-}
+};
+
+export default Berita;

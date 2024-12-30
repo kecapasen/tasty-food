@@ -17,7 +17,7 @@ import { id } from "date-fns/locale";
 import Spinner from "@/components/spinner";
 import { Type } from "@repo/db";
 
-export default function Galeri() {
+const Galeri = () => {
   const { data, isPending, isSuccess } = useQuery<{
     data: GetGalleryDTO[];
   }>({
@@ -146,4 +146,6 @@ export default function Galeri() {
       )}
     </div>
   );
-}
+};
+
+export default Galeri;

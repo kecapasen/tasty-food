@@ -36,14 +36,13 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { FileText, Soup, Trash2 } from "lucide-react";
-import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateOrderDTO, GetCartDetailDTO, GetCartDTO } from "@repo/dto";
 import { patch, get, post } from "@/util/http-request";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toIDR } from "@/util";
-import { socket } from "@/socket";
+import { socket } from "@/lib";
 
 const Cart = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);

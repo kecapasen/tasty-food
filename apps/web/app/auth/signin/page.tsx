@@ -40,7 +40,7 @@ const Signin = () => {
 
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof loginFormSchema>) => {
-      return await signin("auth/signin", values);
+      return await signin("/auth/signin", values);
     },
     onMutate: () => {
       toast({
@@ -83,11 +83,9 @@ const Signin = () => {
       });
     },
   });
-
   const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
     mutation.mutate(values);
   };
-
   return (
     <div className="min-h-dvh flex justify-center items-center bg-slate-100">
       <div className="grid grid-cols-2">
@@ -123,7 +121,11 @@ const Signin = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" {...field} />
+                        <Input
+                          type="password"
+                          {...field}
+                          autoComplete="current-password"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -142,7 +144,21 @@ const Signin = () => {
             </form>
           </FormProvider>
         </Card>
-        {/* Rest of the component remains the same */}
+        <Card className="flex flex-col overflow-hidden h-full rounded-tl-none rounded-bl-none border-l-0">
+          <CardContent className="flex flex-col justify-center items-center p-0 h-full aspect-square relative">
+            <Image
+              src="/sebastian-coman-photography-eBmyH7oO5wY-unsplash.jpg"
+              alt="Dekorasi"
+              fill={true}
+              className="w-auto h-full object-cover brightness-50 scale-x-[-1] select-none"
+              priority
+              quality={100}
+            />
+            <p className="text-4xl font-bold text-white absolute">
+              Tasty <span className="text-accent underline">Food.</span>
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

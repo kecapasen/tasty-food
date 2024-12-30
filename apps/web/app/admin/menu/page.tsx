@@ -31,7 +31,7 @@ const Menu = () => {
       {isPending && <Spinner />}
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
         {isSuccess &&
-          Array.isArray(data.data) &&
+          data.data.length > 0 &&
           data.data.map((menu: GetMenuDTO, index: number) => {
             return <CardMenu key={index} menu={menu} />;
           })}

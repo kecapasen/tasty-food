@@ -58,8 +58,6 @@ export class NewsService {
           : news.updatedAt,
       };
     });
-    if (newsList.length < 1)
-      throw new NotFoundException('Tidak ada berita ditemukan');
     return {
       message: 'Berita berhasil diambil',
       statusCode: 200,
@@ -106,11 +104,13 @@ export class NewsService {
     createNewsDTO: CreateNewsDTO,
     file: Express.Multer.File,
   ): Promise<ResponseDTO> {
+    console.log(file);
     const imageUrl = await this.supabaseService.uploadFile(
       Bucket.NEWS,
       file,
       userId.toString(),
     );
+    console.log(imageUrl);
     if (Array.isArray(imageUrl))
       throw new ConflictException('Unggahan gambar gagal');
     await this.prismaService.news.create({

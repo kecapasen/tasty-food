@@ -28,6 +28,7 @@ export class MenuService {
   > {
     const menus: GetMenuDTO[] = (
       await this.prismaService.menu.findMany({
+        include: { user: true },
         where: {
           deletedAt: { equals: null },
         },
@@ -37,7 +38,7 @@ export class MenuService {
           },
         ],
       })
-    ).map((menu: Menu): GetMenuDTO => {
+    ).map((menu): GetMenuDTO => {
       return {
         id: menu.id,
         name: menu.name,
@@ -45,13 +46,16 @@ export class MenuService {
         price: menu.price,
         category: menu.category,
         image: menu.image,
+        user: {
+          fullname: menu.user.fullname,
+          avatar: menu.user.avatar,
+        },
         createdAt: new TZDate(new Date(menu.createdAt), 'Asia/Jakarta'),
         updatedAt: menu.updatedAt
           ? new TZDate(new Date(menu.updatedAt), 'Asia/Jakarta')
           : menu.updatedAt,
       };
     });
-    if (menus.length < 1) throw new NotFoundException('Menu tidak ditemukan');
     return {
       message: 'Menu berhasil diambil',
       statusCode: 200,

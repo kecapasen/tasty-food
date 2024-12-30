@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { Button } from "./ui/button";
-import Link from "next/link";
-
 export default function Navbar({ title }: { title: string }) {
   return (
     <div className="relative flex font-poppins font-bold text-white">

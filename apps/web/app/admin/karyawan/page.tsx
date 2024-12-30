@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout, { Pages } from "@/components/layout";
 import {
   CaretSortIcon,
@@ -46,14 +46,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 const Employee = () => {
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { data, isPending } = useQuery<{
@@ -205,10 +201,6 @@ const Employee = () => {
       rowSelection,
     },
   });
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!isMounted) return null;
   return (
     <Layout breadcrumb={[{ title: "Karyawan" }]} active={Pages.EMPLOYEE}>
       <div className="w-full flex flex-col gap-4">

@@ -33,19 +33,7 @@ import { post } from "@/util/http-request";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
-
-const menuFormSchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: "Nama menu harus diisi dan minimal 1 karakter." }),
-  description: z.string().optional(),
-  price: z
-    .number({ invalid_type_error: "Harga harus berupa angka." })
-    .min(1000, { message: "Harga minimal adalah Rp 1.000." }),
-  category: z.nativeEnum(Category, {
-    errorMap: () => ({ message: "Kategori harus dipilih." }),
-  }),
-});
+import { menuFormSchema } from "../type";
 
 const AddMenu = () => {
   const [files, setFiles] = useState<Blob[]>([]);
@@ -59,7 +47,9 @@ const AddMenu = () => {
   const form = useForm<z.infer<typeof menuFormSchema>>({
     resolver: zodResolver(menuFormSchema),
     defaultValues: {
-      price: undefined,
+      name: "",
+      description: "",
+      price: 0,
     },
   });
   const { getRootProps, open } = useDropzone({
@@ -160,7 +150,7 @@ const AddMenu = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nama Menu</FormLabel>
+                  <FormLabel>Nama</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -183,7 +173,7 @@ const AddMenu = () => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Harga Menu</FormLabel>
+                  <FormLabel>Harga</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -206,7 +196,7 @@ const AddMenu = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Deskripsi Menu</FormLabel>
+                  <FormLabel>Deskripsi</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
@@ -230,7 +220,7 @@ const AddMenu = () => {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Kategori Menu</FormLabel>
+                  <FormLabel>Kategori</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}

@@ -1,5 +1,12 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  Usable,
+} from "react";
 import Image from "next/image";
 import Layout, { Pages } from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -35,21 +42,10 @@ import { ToastAction } from "@/components/ui/toast";
 import { GetMenuDTO } from "@repo/dto";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/spinner";
+import { menuFormSchema } from "../type";
 
-const menuFormSchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: "Nama menu harus diisi dan minimal 1 karakter." }),
-  description: z.string().optional(),
-  price: z
-    .number({ invalid_type_error: "Harga harus berupa angka." })
-    .min(1000, { message: "Harga minimal adalah Rp 1.000." }),
-  category: z.nativeEnum(Category, {
-    errorMap: () => ({ message: "Kategori harus dipilih." }),
-  }),
-});
-
-const EditMenu = ({ params }: { params: { slug: string } }) => {
+const EditMenu = ({ params }: { params: Usable<{ slug: string }> }) => {
+  const { slug } = use(params);
   const [files, setFiles] = useState<Blob[]>([]);
   const linkRef = useRef<string | null>(null);
   const onDrop = useCallback((acceptedFiles: Blob[]) => {
@@ -63,7 +59,7 @@ const EditMenu = ({ params }: { params: { slug: string } }) => {
   }>({
     queryKey: ["menu"],
     queryFn: async () => {
-      return await get(`/menu/${parseInt(params.slug)}`);
+      return await get(`/menu/${parseInt(slug)}`);
     },
   });
   const form = useForm<z.infer<typeof menuFormSchema>>({
@@ -83,7 +79,7 @@ const EditMenu = ({ params }: { params: { slug: string } }) => {
         formData.append("description", values.description);
       formData.append("price", values.price.toString());
       formData.append("category", values.category);
-      return await patch(`/menu/${params.slug}`, formData);
+      return await patch(`/menu/${slug}`, formData);
     },
     onMutate: () => {
       toast({
@@ -167,7 +163,7 @@ const EditMenu = ({ params }: { params: { slug: string } }) => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nama Menu</FormLabel>
+                      <FormLabel>Nama</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -190,7 +186,7 @@ const EditMenu = ({ params }: { params: { slug: string } }) => {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Harga Menu</FormLabel>
+                      <FormLabel>Harga</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -217,7 +213,7 @@ const EditMenu = ({ params }: { params: { slug: string } }) => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Deskripsi Menu</FormLabel>
+                      <FormLabel>Deskripsi</FormLabel>
                       <FormControl>
                         <Textarea
                           {...field}
@@ -241,7 +237,7 @@ const EditMenu = ({ params }: { params: { slug: string } }) => {
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Kategori Menu</FormLabel>
+                      <FormLabel>Kategori</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}

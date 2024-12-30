@@ -31,7 +31,6 @@ import {
   getFilteredRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -41,7 +40,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { FileText } from "lucide-react";
 
 const DetailHistory = ({ params }: { params: { slug: string } }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -249,15 +247,7 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 w-full"
-              >
-                <FileText className="h-4 w-4" />
-                Print
-              </Button>
-            </CardFooter>
+            <CardFooter />
           </Card>
         </>
       )}

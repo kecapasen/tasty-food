@@ -32,19 +32,7 @@ import { post } from "@/util/http-request";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
-
-const employeeFormSchema = z.object({
-  userId: z.number({ invalid_type_error: "userID harus berupa angka." }),
-  fullname: z
-    .string()
-    .min(3, { message: "Nama harus diisi dan minimal 3 karakter." }),
-  password: z
-    .string()
-    .min(6, { message: "Nama harus diisi dan minimal 6 karakter." }),
-  role: z.nativeEnum(Role, {
-    errorMap: () => ({ message: "Role harus dipilih." }),
-  }),
-});
+import { employeeFormSchema } from "../type";
 
 const AddEmployee = () => {
   const [files, setFiles] = useState<Blob[]>([]);
@@ -57,6 +45,11 @@ const AddEmployee = () => {
   const { push } = useRouter();
   const form = useForm<z.infer<typeof employeeFormSchema>>({
     resolver: zodResolver(employeeFormSchema),
+    defaultValues: {
+      userId: "",
+      fullname: "",
+      password: "",
+    },
   });
   const { getRootProps, open } = useDropzone({
     maxFiles: 1,
@@ -148,7 +141,7 @@ const AddEmployee = () => {
               name="fullname"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nama lengkap</FormLabel>
+                  <FormLabel>Nama</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -178,7 +171,7 @@ const AddEmployee = () => {
                       {...field}
                       value={field.value || ""}
                       onChange={(event) => {
-                        field.onChange(parseInt(event.target.value) || "");
+                        field.onChange(event.target.value || "");
                       }}
                     />
                   </FormControl>

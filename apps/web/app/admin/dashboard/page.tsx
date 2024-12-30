@@ -8,7 +8,7 @@ import StatDashboard from "@/components/dashboard/stat-dashboard";
 import { toIDR } from "@/util";
 import SalesChartDashboard from "@/components/dashboard/sales-chart-dashboard";
 import ListTransactionDashboard from "@/components/dashboard/list-transaction-dashboard";
-import { socket } from "@/socket";
+import { socket } from "@/lib";
 import { GetDashboardDTO } from "@repo/dto";
 import Spinner from "@/components/spinner";
 

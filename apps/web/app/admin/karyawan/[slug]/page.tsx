@@ -1,5 +1,12 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Usable,
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import Layout, { Pages } from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -34,21 +41,10 @@ import { ToastAction } from "@/components/ui/toast";
 import { GetUserDTO } from "@repo/dto";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/spinner";
+import { employeeFormSchema } from "../type";
 
-const employeeFormSchema = z.object({
-  userId: z.number({ invalid_type_error: "userID harus berupa angka." }),
-  fullname: z
-    .string()
-    .min(3, { message: "Nama harus diisi dan minimal 3 karakter." }),
-  password: z
-    .string()
-    .min(6, { message: "Nama harus diisi dan minimal 6 karakter." }),
-  role: z.nativeEnum(Role, {
-    errorMap: () => ({ message: "Role harus dipilih." }),
-  }),
-});
-
-const EditEmployee = ({ params }: { params: { slug: string } }) => {
+const EditEmployee = ({ params }: { params: Usable<{ slug: string }> }) => {
+  const { slug } = use(params);
   const [files, setFiles] = useState<Blob[]>([]);
   const linkRef = useRef<string | null>(null);
   const onDrop = useCallback((acceptedFiles: Blob[]) => {
@@ -62,7 +58,7 @@ const EditEmployee = ({ params }: { params: { slug: string } }) => {
   }>({
     queryKey: ["employee"],
     queryFn: async () => {
-      return await get(`/user/${parseInt(params.slug)}`);
+      return await get(`/user/${parseInt(slug)}`);
     },
   });
   const form = useForm<z.infer<typeof employeeFormSchema>>({
@@ -80,7 +76,7 @@ const EditEmployee = ({ params }: { params: { slug: string } }) => {
       formData.append("fullname", values.fullname);
       formData.append("role", values.role);
       formData.append("password", values.password);
-      return await patch(`/user/${params.slug}`, formData);
+      return await patch(`/user/${slug}`, formData);
     },
     onMutate: () => {
       toast({
@@ -116,7 +112,7 @@ const EditEmployee = ({ params }: { params: { slug: string } }) => {
   };
   useEffect(() => {
     if (isSuccess && !!data.data) {
-      form.setValue("userId", data.data.userId);
+      form.setValue("userId", data.data.userId.toString());
       form.setValue("fullname", data.data.fullname);
       form.setValue("role", data.data.role);
       form.setValue("password", data.data.password);
@@ -203,7 +199,7 @@ const EditEmployee = ({ params }: { params: { slug: string } }) => {
                           type="number"
                           value={field.value || ""}
                           onChange={(event) => {
-                            field.onChange(parseInt(event.target.value) || "");
+                            field.onChange(event.target.value || "");
                           }}
                           disabled
                         />

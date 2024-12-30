@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Layout, { Pages } from "@/components/layout";
 import {
   CaretSortIcon,
@@ -46,7 +46,6 @@ import { id } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 
 const News = () => {
-  const [isMounted, setIsMounted] = useState<boolean>(false);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -184,10 +183,6 @@ const News = () => {
       rowSelection,
     },
   });
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!isMounted) return null;
   return (
     <Layout breadcrumb={[{ title: "Berita" }]} active={Pages.NEWS}>
       <div className="w-full flex flex-col gap-4">

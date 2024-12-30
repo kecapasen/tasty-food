@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, Usable, use } from "react";
 import Layout, { Pages } from "@/components/layout";
 import Spinner from "@/components/spinner";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -31,7 +30,6 @@ import {
   getFilteredRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -41,10 +39,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { FileText } from "lucide-react";
 
-const DetailHistory = ({ params }: { params: { slug: string } }) => {
-  const [isMount, setIsMount] = useState<boolean>(false);
+const DetailHistory = ({ params }: { params: Usable<{ slug: string }> }) => {
+  const { slug } = use(params);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -54,7 +51,7 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
   }>({
     queryKey: ["order"],
     queryFn: async () => {
-      return await get(`/order/${parseInt(params.slug)}`);
+      return await get(`/order/${parseInt(slug)}`);
     },
   });
   const columns: ColumnDef<GetOrderDetailDTO>[] = [
@@ -130,10 +127,6 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
       rowSelection,
     },
   });
-  useEffect(() => {
-    setIsMount(true);
-  }, []);
-  if (!isMount) return null;
   return (
     <Layout
       active={Pages.HISTORY}
@@ -165,33 +158,34 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
                   {data!.data.status}
                 </Badge>
               </div>
-              <div className="flex items-center gap-4">
+            </CardHeader>
+            <Separator />
+            <CardContent className="p-6 flex flex-col gap-2">
+              <div className="flex items-center gap-2">
                 <div className="flex items-center gap-2 relative">
                   <Avatar>
                     <AvatarImage
                       src={data!.data.user.avatar || undefined}
                       alt="Dekorator"
                     />
-                    <AvatarFallback className="text-xs font-semibold">
+                    <AvatarFallback className="font-semibold">
                       {data!.data.user.fullname
                         .split(" ")
                         .map((data: string) => data[0]?.toUpperCase())
                         .join("")}
                     </AvatarFallback>
                   </Avatar>
-                  <CardDescription className="capitalize line-clamp-1">
+                  <p className="capitalize text-sm font-semibold">
                     {data!.data.user.fullname}
-                  </CardDescription>
+                  </p>
                 </div>
                 <Separator orientation="vertical" className="h-4" />
-                <CardDescription>
+                <p className="text-xs text-muted-foreground">
                   {format(new Date(data!.data.createdAt), "PPPppp", {
                     locale: id,
                   })}
-                </CardDescription>
+                </p>
               </div>
-            </CardHeader>
-            <CardContent>
               <div className="w-full flex flex-col gap-4">
                 <div className="rounded-md border">
                   <Table>
@@ -254,15 +248,7 @@ const DetailHistory = ({ params }: { params: { slug: string } }) => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 w-full"
-              >
-                <FileText className="h-4 w-4" />
-                Print
-              </Button>
-            </CardFooter>
+            <CardFooter />
           </Card>
         </>
       )}
